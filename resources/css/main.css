@@ -1,0 +1,383 @@
+body,html{
+	margin:0;
+	padding:0;
+	width:100%;
+	height:100%;
+	overflow:hidden;
+}
+
+div#windows{
+	height:1.5em;
+}
+
+div#windows ul#windowList{
+	margin:0;
+	padding:0;
+	font-family: 'PT Sans', sans-serif;
+}
+
+div#windows ul#windowList li{
+	padding:0.1em 1em 0.1em 2em;
+	margin-left:1em;
+	display:inline-block;
+	text-align:center;
+	border:1px solid black;
+	background:#EEEEEE;
+	border-top:none;
+	border-bottom-left-radius:0.5em;
+	border-bottom-right-radius:0.5em;
+	cursor:pointer;
+}
+
+div#windows ul#windowList li.selected{
+	font-size:1.1em;
+	font-weight:bold;
+	cursor:default;
+}
+
+div#windows ul#windowList li div{
+	width:1em;
+	height:1em;
+	display:inline-block;
+}
+
+div#windows ul#windowList li div.delete{
+	background:url("../svg/delete-hover.svg");
+	visibility:hidden;
+	cursor:pointer;
+}
+
+div#windows ul#windowList li:hover div.delete{
+	visibility:visible;
+}
+
+div#connections{
+	font-family:'PT Sans', sans-serif;
+	color:#617FD6;
+}
+
+div#connections ul{
+	font-size:2em;
+}
+
+div#connections ul li{
+	list-style-type:none;
+	margin-left:2em;
+	margin-top:0.5em;
+	margin-bottom:0.5em;
+	font-size:0.6em;
+	padding:0.25em;
+	padding-left:1em;
+	width:70%;
+	cursor:pointer;
+	border:1px solid #FFFFFF;
+	border-radius:0.5em;
+}
+
+div#connections ul li:hover{
+	border:1px solid #999999;
+	background:#B7BACA;
+	color:#FFFFFF;
+	font-weight:bold;
+	transition:border 0.1s, background 0.1s, color 0.1s, font-weight 0.1s;
+}
+
+div#connections ul li div.delete{
+	display:inline-block;
+	width:1.2em;
+	height:1.2em;
+	background:url("../svg/delete.svg");
+	visibility:hidden;
+	margin-left:1.5em;
+	margin-right:0.5em;
+}
+
+div#connections ul li:hover div.delete{
+	visibility:visible;
+}
+
+div#connections ul li:hover div.delete:hover{
+	background:url("../svg/delete-hover.svg");
+	transition:background 0.1s;
+}
+
+div#connections ul li span{
+	float:right;
+	margin-top:-0.15em;
+}
+
+div#walls{
+	font-family:'PT Sans', sans-serif;
+	margin-left:4em;
+}
+
+div#walls h1{
+	margin-left:1em;
+	margin-top:1em;
+	color:#617FD6;
+	font-size:2em;
+	font-weight:normal;
+}
+
+div.wall-icon{
+	position:relative;
+	width:24em;
+	height:12em;
+	margin-right:3em;
+	margin-bottom:3em;
+	display:inline-block;
+	text-align:center;
+	border-radius:1.5em;
+	background:#A6B4DD;
+	color:#FFFFFF;
+	cursor:pointer;
+}
+
+div.wall-icon:hover{
+	background:#FF6666;
+	transition:background 0.15s;
+}
+
+div.wall-icon p{
+	height:35%;
+}
+
+div.wall-icon div.buttons{
+	height:1.5em;
+	width:100%;
+	text-align:center;
+	visibility:hidden;
+}
+
+div.wall-icon:hover div.buttons{
+	visibility:visible;
+	transition:visibility 0.15s;
+}
+
+div.wall-icon div.buttons div{
+	width:2em;
+	height:2em;
+	margin-right:0.5em;
+	margin-left:0.5em;
+	display:inline-block;
+}
+
+div.wall-icon div.buttons div.delete{
+	background:url("../svg/delete.svg");
+}
+
+div.wall-icon div.buttons div.edit{
+	background:url("../svg/edit.svg");
+}
+
+div#wall-frame{
+	width:100%;
+	height:100%;
+	display:block;
+	position:relative;
+}
+
+canvas#wall{
+	width:100%;
+	height:100%;
+	margin:0;
+	padding:0;
+}
+
+div#functions{
+	position:absolute;
+	right:0;
+	top:0;
+	width:5em;
+	height:100%;
+	background:#FF6666;
+}
+
+div#functions div.function-button{
+	width:5em;
+	height:5em;
+	cursor:pointer;
+	margin-top:3em;
+}
+
+div#functions div.function-button:hover{
+	background:#FFEEEE;
+	transition: background-color 250ms linear;
+}
+
+div#functions div.add{
+	background:url("../svg/addSticky.svg");
+}
+
+div#functions div.add:hover{
+	background-image:url("../svg/addSticky-hover.svg");
+}
+
+div#functions div.settings{
+	background:url("../svg/settings.svg");
+}
+
+div#functions div.settings:hover{
+	background-image:url("../svg/settings-hover.svg");
+}
+
+textarea.no-frame{
+	position:absolute;
+	display:block;
+	border:none;
+	resize:none;
+	outline:none;
+	box-shadow:none;
+	-webkit-box-shadow:none;
+	-moz-box-shadow:none;
+	font-family:'Amatic SC', cursive;
+	font-weight:bold;
+	font-size:20px;
+}
+
+canvas.hover{
+	cursor:pointer;
+}
+
+div.editor{
+	position:absolute;
+}
+
+div.editor div{
+	margin-bottom:2em;
+}
+
+div.editor div.btnDiv{
+	height:1em;
+	clear:both;
+	padding-top:1em;
+	bottom:0;
+}
+
+div.editor h4{
+	margin:0;
+	padding:0;
+	font-size:1.2em;
+	font-family:'PT Sans', sans-serif;
+}
+
+div.editor textarea{
+	width:99%;
+	height:4em;
+	resize:none;
+	border-radius:0.5em;
+	font-family:'PT Sans', sans-serif;
+	background:rgba(255,255,255,0.5);
+	outline:none;
+	box-shadow:none;
+	-webkit-box-shadow:none;
+	-moz-box-shadow:none;
+}
+
+div.editor textarea[disabled]{
+	background:default;
+}
+
+div.editor button{
+	float:right;
+	margin-right:1em;
+	background:none;
+	border:none;
+	cursor:pointer;
+	font-family:'PT Sans', sans-serif;
+	font-size:1em;
+	outline:none;
+	box-shadow:none;
+	-webkit-box-shadow:none;
+	-moz-box-shadow:none;
+	font-weight:bold;
+}
+
+div.editor button.left{
+	float:left;
+}
+
+div.editor table{
+	width:99%;
+	font-family:'PT Sans', sans-serif;
+	text-align:left;
+}
+
+div.editor h4.noComments{
+	color:#888888;
+	text-shadow:0.1em 0.1em rgba(0,0,0,0.25);
+	text-align:center;
+	font-size:2em;
+}
+
+div.modal-background{
+	width:100%;
+	height:100%;
+	position:absolute;
+	top:0;
+	left:0;
+	background:rgba(0,0,0,0.1);
+	cursor:pointer;
+}
+
+div.modal-background div.loading{
+	height:100%;
+	background:url('../images/loading.gif');
+	background-repeat:no-repeat;
+	background-position:center center;
+}
+
+div.modal{
+	position:absolute;
+	background:#FF6666;
+	border-radius:1em;
+	font-family:'PT Sans', sans-serif;
+	color:#333333;
+	cursor:default;
+}
+
+div.modal h1{
+	text-align:center;
+}
+
+div.modal p{
+	width:90%;
+	margin-left:5%;
+}
+
+div.modal p input, div.modal p textarea{
+	float:right;
+	width:75%;
+}
+
+div.modal p textarea{
+	height:3em;
+	resize:none;
+}
+
+div.modal p.textarea{
+	height:3em;
+}
+
+div.modal div.button-div{
+	text-align:center;
+	margin-bottom:1em;
+}
+
+div.modal button{
+	background:#6A8C64;
+	color:#FFFFFF;
+	border-radius:0.25em;
+	border:none;
+	width:5em;
+	height:2em;
+	font-size:1em;
+	font-weight:bold;
+	cursor:pointer;
+}
+
+div.modal a.button-link{
+	cursor:pointer;
+	display:block;
+	text-align:center;
+}

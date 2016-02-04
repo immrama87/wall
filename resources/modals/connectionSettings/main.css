@@ -1,0 +1,59 @@
+div.modal{
+	top:25%;
+	left:25%;
+	width:50%;
+	height:40%;
+}
+
+ul.nav li{
+	list-style-type:none;
+	display:inline-block;
+	width:5em;
+	margin-left:1em;
+	cursor:pointer;
+}
+
+ul.nav li.selected{
+	font-weight:bold;
+	text-decoration:underline;
+}
+
+div.details h3{
+	margin-left:2em;
+}
+
+div.details p{
+	width:30%;
+}
+
+div.details p span.detail-name{
+	font-weight:bold;
+}
+
+div.details p span.detail-value{
+	float:right;
+}
+
+div.users table{
+	width:90%;
+	margin-left:5%;
+	height:80%;
+	position:relative;
+	border-collapse:collapse;
+}
+
+div.users table td, div.users table th{
+	text-align:left;
+}
+
+div.users table tbody tr:hover{
+	background:#A6B4DD;
+	transition:background 0.15s;
+	cursor:pointer;
+}
+
+div.button-div{
+	position:absolute;
+	bottom:0.5em;
+	width:100%;
+}

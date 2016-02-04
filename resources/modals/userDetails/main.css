@@ -1,0 +1,26 @@
+div.modal{
+	width:20%;
+	left:40%;
+	height:auto;
+}
+
+div.modal h3{
+	margin-left:1em;
+}
+
+div.modal p{
+	width:90%;
+}
+
+div.modal p span.detail-name{
+	font-weight:bold;
+}
+
+div.modal p span.detail-value{
+	float:right;
+}
+
+div.button-div{
+	position:relative;
+	margin-top:2em;
+}

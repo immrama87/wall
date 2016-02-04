@@ -1,0 +1,37 @@
+div.modal{
+	left:25%;
+	top:25%;
+	width:50%;
+}
+
+ul.nav li{
+	list-style-type:none;
+	display:inline-block;
+	width:5em;
+	margin-left:1em;
+	cursor:pointer;
+}
+
+ul.nav li.selected{
+	font-weight:bold;
+	text-decoration:underline;
+}
+
+div.modal table{
+	width:90%;
+	margin-left:5%;
+}
+
+div.modal table tr th, div.modal table tr td{
+	text-align:left;
+	padding-left:0.5em;
+	height:1em;
+}
+
+div.modal table tr td div.color-div{
+	width:1em;
+	height:1em;
+	display:inline-block;
+	vertical-align:-0.125em;
+	margin-right:0.25em;
+}
