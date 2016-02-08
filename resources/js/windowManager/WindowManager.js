@@ -1,5 +1,7 @@
-define("windowManager/WindowManager", ["windowManager/Modals", "windowManager/Ajax"], function(Modals, Ajax){
+define("windowManager/WindowManager", ["windowManager/Modals", "windowManager/Ajax", "windowManager/Tabulator"], function(Modals, Ajax, Tabulator){
 	var wm = {};
+	
+	wm.Tabulator = Tabulator;
 	
 	var connections = document.getElementById("connections");
 	var walls = document.getElementById("walls");

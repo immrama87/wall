@@ -8,11 +8,27 @@ var controller = (function(target){
 	function loadTable(){
 		var details = target.catTable.getDetails();
 		
+		WindowManager.Tabulator.create(target.catTable, {
+			cols:	[
+				{
+					name:		"Name",
+					sortable:	true,
+					key:		"Name"
+				},
+				{
+					name:		"Color",
+					sortable:	true,
+					key:		"Color",
+					format:		"<div class='color-div' style='background-color:#{{data}}'></div>#{{data}}"
+				}
+			]
+		});
+		
 		WindowManager.get(details.url + "/api/walls/" + details.wallId + "/categories", {
 			success:	function(data){
 				var response = JSON.parse(data);
 				if(response.status == "success"){
-					generateTable(response.records);
+					//generateTable(response.records);
 				}
 			}
 		});

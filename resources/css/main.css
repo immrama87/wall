@@ -123,6 +123,7 @@ div#walls h1{
 
 div.wall-icon{
 	margin-bottom:3em;
+	height:14em;
 	text-align:center;
 	border-radius:1.5em;
 	background:#A6B4FF;
@@ -131,13 +132,39 @@ div.wall-icon{
 	padding:1em;
 }
 
+div.wall-add{
+	height:14em;
+	padding:1em;
+	background:none;
+	border-radius:1.5em;
+	border:0.25em dashed #CCCCCC;
+	color:#CCCCCC;
+	text-align:center;
+	transition:color 0.2s ease, border-color 0.2s ease;
+	cursor:pointer;
+}
+
+div.wall-add:hover{
+	border-color:#888888;
+	color:#888888;
+}
+
+div.wall-add i{
+	font-size:4em;
+	margin:0.25em 0;
+}
+
 div.wall-icon:hover{
 	background:#FF6666;
 	transition:background 0.2s ease;
 }
 
+div.wall-icon h2{
+	height:2em;
+}
+
 div.wall-icon p{
-	height:35%;
+	height:2em;
 }
 
 div.wall-icon div.buttons{

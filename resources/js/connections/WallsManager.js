@@ -78,6 +78,8 @@ define("connectionManager/WallsManager", ["wallManager"], function(WallManager){
 				wallFrame.appendChild(generateWallDiv(walls[i], url, wv));
 			}
 			
+			wallFrame.appendChild(generateAddDiv(wv));
+			
 			var clearFix = document.createElement("div");
 			clearFix.className = "clearfix";
 			
@@ -156,6 +158,29 @@ define("connectionManager/WallsManager", ["wallManager"], function(WallManager){
 		}
 		
 		div.appendChild(buttons);
+		
+		return container;
+	}
+	
+	function generateAddDiv(manager){
+		var container = document.createElement("div");
+		container.className = "col-xs-6 col-md-3";
+		
+		var div = document.createElement("div");
+		div.className = "wall-add";
+		container.appendChild(div);
+		
+		var addIcon = document.createElement("i");
+		addIcon.className = "fa fa-plus";
+		div.appendChild(addIcon);
+		
+		var addText = document.createElement("p");
+		addText.appendChild(document.createTextNode("Add New Wall..."));
+		div.appendChild(addText);
+		
+		container.onclick = function(){
+			manager.add();
+		}
 		
 		return container;
 	}
