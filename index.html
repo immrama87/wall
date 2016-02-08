@@ -5,6 +5,8 @@
 	
 	<link href='https://fonts.googleapis.com/css?family=Amatic+SC' rel='stylesheet' type='text/css'>
 	<link href='https://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" type="text/css" href="resources/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="resources/css/font-awesome.min.css" />
 	<link rel="stylesheet" type="text/css" href="resources/css/main.css" />
 </head>
 <body>
@@ -20,14 +22,21 @@
 		</div>
 		<div id="walls">
 			<h1>Walls</h1>
+			<div id="wallsList">
+			</div>
 		</div>
 		<canvas id="wall">
 			Your browser does not support the Canvas element. Please download a newer browser to use this site.
 		</canvas>
 	</div>
 	<div id="functions">
-		<div class="function-button add" function="add"></div>
-		<div class="function-button settings" function="settings"></div>
+		<div id="menu-slide"><i class="fa fa-bars"></i></div>
+		<div class="function-button" function="add">
+			<i class="fa fa-plus"></i>
+		</div>
+		<div class="function-button" function="settings">
+			<i class="fa fa-cog"></i>
+		</div>
 	</div>
 	<script type="text/javascript" src="resources/js/require/require.js" data-main="resources/js/require/main.js"></script>
 </body>

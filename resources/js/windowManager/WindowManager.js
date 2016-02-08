@@ -100,6 +100,23 @@ define("windowManager/WindowManager", ["windowManager/Modals", "windowManager/Aj
 				buttons[i].style.display = "none";
 			}
 		}
+		
+		if(!functions.hasAttribute("is-hidden")){
+			functions.setAttribute("is-hidden", true);
+		}
+		
+		var menuSlide = document.getElementById("menu-slide");
+		
+		menuSlide.onclick = function(evt){
+			if(functions.getAttribute("is-hidden") === 'true'){
+				functions.style.right = "0";
+				functions.setAttribute("is-hidden", false);
+			}
+			else {
+				functions.style.right = "-5em";
+				functions.setAttribute("is-hidden", true);
+			}
+		}
 	}
 	
 	wm.formatDate = function(dateLong){

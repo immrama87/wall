@@ -27,6 +27,7 @@ div#windows ul#windowList li{
 	border-bottom-left-radius:0.5em;
 	border-bottom-right-radius:0.5em;
 	cursor:pointer;
+	margin-top:-0.1em;
 }
 
 div#windows ul#windowList li.selected{
@@ -83,22 +84,18 @@ div#connections ul li:hover{
 }
 
 div#connections ul li div.delete{
-	display:inline-block;
-	width:1.2em;
-	height:1.2em;
-	background:url("../svg/delete.svg");
+	margin-top:0.25em;
 	visibility:hidden;
-	margin-left:1.5em;
-	margin-right:0.5em;
 }
 
 div#connections ul li:hover div.delete{
+	color:#617FD6;
 	visibility:visible;
 }
 
 div#connections ul li:hover div.delete:hover{
-	background:url("../svg/delete-hover.svg");
-	transition:background 0.1s;
+	color:#FFFFFF;
+	transition:color 0.1s;
 }
 
 div#connections ul li span{
@@ -108,7 +105,12 @@ div#connections ul li span{
 
 div#walls{
 	font-family:'PT Sans', sans-serif;
-	margin-left:4em;
+	height:calc(100% - 1.5em);
+}
+
+div#walls div#wallsList{
+	overflow-y:auto;
+	height:calc(100% - 2em);
 }
 
 div#walls h1{
@@ -120,17 +122,13 @@ div#walls h1{
 }
 
 div.wall-icon{
-	position:relative;
-	width:24em;
-	height:12em;
-	margin-right:3em;
 	margin-bottom:3em;
-	display:inline-block;
 	text-align:center;
 	border-radius:1.5em;
 	background:#A6B4DD;
 	color:#FFFFFF;
 	cursor:pointer;
+	padding:1em;
 }
 
 div.wall-icon:hover{
@@ -186,31 +184,42 @@ canvas#wall{
 
 div#functions{
 	position:absolute;
-	right:0;
+	right:-5em;
 	top:0;
 	width:5em;
 	height:100%;
 	background:#FF6666;
+	box-shadow:-0.25em 0em 0.25em rgba(0,0,0,0.2);
+	transition:right 0.4s ease;
+}
+
+div#functions div#menu-slide{
+	position:absolute;
+	font-size:2em;
+	right:2.5em;
+	top:0.5em;
+	background:#FF6666;
+	color:#FFEEEE;
+	padding:0 0.25em 0 0.5em;
+	border-top-left-radius:0.5em;
+	border-bottom-left-radius:0.5em;
+	cursor:pointer;
 }
 
 div#functions div.function-button{
-	width:5em;
-	height:5em;
+	width:1.25em;
+	height:1.25em;
 	cursor:pointer;
-	margin-top:3em;
+	margin-top:0.5em;
+	font-size:4em;
+	text-align:center;
+	color:#FFEEEE;
+	transition: color 0.25s ease, text-shadow 0.25s ease;
 }
 
 div#functions div.function-button:hover{
-	background:#FFEEEE;
-	transition: background-color 250ms linear;
-}
-
-div#functions div.add{
-	background:url("../svg/addSticky.svg");
-}
-
-div#functions div.add:hover{
-	background-image:url("../svg/addSticky-hover.svg");
+	color:#6DD661;
+	text-shadow:-0.1em 0.1em 0.25em rgba(0,0,0,0.1);
 }
 
 div#functions div.settings{
@@ -334,6 +343,9 @@ div.modal{
 	font-family:'PT Sans', sans-serif;
 	color:#333333;
 	cursor:default;
+	display:block !important;
+	bottom:auto !important;
+	box-shadow: 0.25em 0.25em 0.25em rgba(0,0,0,0.2);
 }
 
 div.modal h1{
@@ -343,11 +355,19 @@ div.modal h1{
 div.modal p{
 	width:90%;
 	margin-left:5%;
+	font-weight:bold;
 }
 
 div.modal p input, div.modal p textarea{
 	float:right;
 	width:75%;
+	border:none;
+	border-radius:0.5em;
+	padding:0 0.5em;
+	outline:none;
+	box-shadow:inset 0.25em 0.25em 0.1em rgba(0,0,0,0.2);
+	display:inline-block;
+	font-weight:normal;
 }
 
 div.modal p textarea{

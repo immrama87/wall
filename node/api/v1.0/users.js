@@ -3,28 +3,11 @@ var crypto = require("crypto");
 module.exports = function(app, db, sessions){
 	var path = "/api/users/";
 	
-	app.param("id", function(req,res,next,id){
-		req.id = id
-		next();
-	});
-	
 	app.get(path, function(req, res){
 		db.get({
 			coll:		"users",
 			fields:		["FirstName", "LastName", "UserName"],
 			query:		{},
-			callback:	function(data){
-				res.send(JSON.stringify(data));
-			}
-		});
-	});
-	
-	app.get(path + ":id", function(req, res){
-		console.log(req.id);
-		db.get({
-			coll:		"users",
-			fields:		["FirstName", "LastName", "UserName", "CreateDate", "ModifiedDate", "LastLogin"],
-			query:		{UserName:	req.id},
 			callback:	function(data){
 				res.send(JSON.stringify(data));
 			}
@@ -104,6 +87,23 @@ module.exports = function(app, db, sessions){
 				}
 				
 				res.end(JSON.stringify(response));
+			}
+		});
+	});
+	
+	app.param("id", function(req,res,next,id){
+		req.id = id
+		next();
+	});
+	
+	app.get(path + ":id", function(req, res){
+		console.log(req.id);
+		db.get({
+			coll:		"users",
+			fields:		["FirstName", "LastName", "UserName", "CreateDate", "ModifiedDate", "LastLogin"],
+			query:		{UserName:	req.id},
+			callback:	function(data){
+				res.send(JSON.stringify(data));
 			}
 		});
 	});

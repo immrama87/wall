@@ -71,15 +71,21 @@ define("connectionManager/ConnectionManager", ["connectionManager/WallsManager"]
 	
 	function generateConnectionListItem(name, url){
 		var li = document.createElement("li");
-		li.appendChild(document.createTextNode(name));
+		li.className = "row";
 		
-		var span = document.createElement("span");
-		span.appendChild(document.createTextNode(url));
-		li.appendChild(span);
+		var nameDiv = document.createElement("div");
+		nameDiv.className = "col-xs-6";
+		nameDiv.appendChild(document.createTextNode(name));
+		li.appendChild(nameDiv);
+		
+		var urlDiv = document.createElement("div");
+		urlDiv.className = "col-xs-5";
+		urlDiv.appendChild(document.createTextNode(url));
+		li.appendChild(urlDiv);
 		
 		var button = document.createElement("div");
-		button.className = "delete";
-		span.appendChild(button);
+		button.className = "col-xs-1 fa fa-times-circle delete";
+		li.appendChild(button);
 		
 		li.onclick = function(){
 			tryConnection(url, name);

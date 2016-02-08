@@ -24,6 +24,29 @@ define("windowManager/Modals", [], function(){
 		return modal;
 	}
 	
+	m.fadeIn = function(modal, time){
+		var msUpdate = 1 / time;
+		var start, end;
+		
+		function step(timestamp){
+			if(start == undefined){
+				start = timestamp;
+				end = timestamp + time;
+			}
+			var ms = timestamp - start;
+			
+			modal.style.opacity = msUpdate * ms;
+			if(timestamp < end){
+				window.requestAnimationFrame(step);
+			}
+			else {
+				modal.style.opacity = 1;
+			}
+		}
+		
+		window.requestAnimationFrame(step);
+	}
+	
 	function loadHTML(url, func){
 		loadResource(url + "/main.html", function(html){
 			var modal = parseModalHTML(html, func);
@@ -79,6 +102,10 @@ define("windowManager/Modals", [], function(){
 			if(modal.hasOwnProperty("init")){
 				modal.init();
 			}
+			
+			modal.style.opacity = 0;
+			
+			m.fadeIn(modal, 250);
 		});
 	}
 	

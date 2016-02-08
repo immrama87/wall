@@ -1,7 +1,7 @@
 define("connectionManager/WallsManager", ["wallManager"], function(WallManager){
 	var wm = {};
 	
-	var wallFrame = document.getElementById("walls");
+	var wallFrame = document.getElementById("wallsList");
 	
 	wm.create = function(name, url, walls){
 		return new WallView(name, url, walls);
@@ -66,12 +66,21 @@ define("connectionManager/WallsManager", ["wallManager"], function(WallManager){
 			for(var i=0;i<walls.length;i++){
 				wallFrame.appendChild(generateWallDiv(walls[i], url));
 			}
+			
+			var clearFix = document.createElement("div");
+			clearFix.className = "clearfix";
+			
+			wallFrame.appendChild(clearFix);
 		}
 	}
 	
 	function generateWallDiv(wall, url){
+		var container = document.createElement("div");
+		container.className = "col-xs-6 col-md-3";
+		
 		var div = document.createElement("div");
 		div.className = "wall-icon";
+		container.appendChild(div);
 		
 		var h2 = document.createElement("h2");
 		h2.appendChild(document.createTextNode(wall.Name));
@@ -103,7 +112,7 @@ define("connectionManager/WallsManager", ["wallManager"], function(WallManager){
 		
 		div.appendChild(buttons);
 		
-		return div;
+		return container;
 	}
 	
 	return wm;
