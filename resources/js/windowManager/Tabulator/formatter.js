@@ -13,6 +13,7 @@ define("windowManager/Tabulator/formatter", [], function(){
 			table.innerHTML = "";
 			
 			thead = document.createElement("thead");
+			table.thead = thead;
 			table.appendChild(thead);
 			
 			tbody = document.createElement("tbody");
@@ -37,6 +38,7 @@ define("windowManager/Tabulator/formatter", [], function(){
 		function generateHeaderCell(colConfig){
 			var th = document.createElement("th");
 			th.appendChild(document.createTextNode(colConfig.name));
+			th.key = colConfig.key;
 			
 			return th;
 		}

@@ -87,17 +87,18 @@ define("connectionManager/ConnectionManager", ["connectionManager/WallsManager"]
 		button.className = "col-xs-1 fa fa-times-circle delete";
 		li.appendChild(button);
 		
-		li.onclick = function(){
+		$(li).on("click touch touchstart", function(evt){
 			tryConnection(url, name);
-		}
+		});
 		
-		button.onclick = function(evt){
-			var conf = confirm("Deleting a connection cannot be undone. Continue?");
-			if(conf){
+		$(button).on("click touch touchstart", function(evt){
+			if(confirm("Delete connection " + name + "? This cannot be undone")){
 				deleteConnection(name);
 			}
-			evt.stopPropagation();
-		}
+			else {
+				evt.stopPropagation();
+			}
+		});
 		
 		return li;
 	}
@@ -125,7 +126,12 @@ define("connectionManager/ConnectionManager", ["connectionManager/WallsManager"]
 					});
 				}
 				else if(response.status == "success"){
-					WallsManager.create(name, url, response.records).init();
+					if(WindowManager.hasWindow(name + " - Walls")){
+						WindowManager.openWindow(name + " - Walls");
+					}
+					else {
+						WallsManager.create(name, url, response.records).init();
+					}
 				}
 				else {
 					alert(response.data);

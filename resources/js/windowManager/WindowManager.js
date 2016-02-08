@@ -59,6 +59,10 @@ define("windowManager/WindowManager", ["windowManager/Modals", "windowManager/Aj
 		addWindowTab(name);
 	}
 	
+	wm.hasWindow = function(name){
+		return windows.hasOwnProperty(name);
+	}
+	
 	wm.openWindow = function(name){
 		var lis = windowList.getElementsByTagName("li");
 		for(var i=0;i<lis.length;i++){
@@ -109,7 +113,8 @@ define("windowManager/WindowManager", ["windowManager/Modals", "windowManager/Aj
 		
 		var menuSlide = document.getElementById("menu-slide");
 		
-		menuSlide.onclick = function(evt){
+		$(menuSlide).off("click touch touchstart");
+		$(menuSlide).on("click touch touchstart", function(evt){
 			if(functions.getAttribute("is-hidden") === 'true'){
 				functions.style.right = "0";
 				functions.setAttribute("is-hidden", false);
@@ -118,7 +123,7 @@ define("windowManager/WindowManager", ["windowManager/Modals", "windowManager/Aj
 				functions.style.right = "-5em";
 				functions.setAttribute("is-hidden", true);
 			}
-		}
+		});
 	}
 	
 	wm.formatDate = function(dateLong){

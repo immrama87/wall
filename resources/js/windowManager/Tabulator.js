@@ -12,7 +12,7 @@ define("windowManager/Tabulator", ["windowManager/Tabulator/formatter", "windowM
 		format.initFormat();
 		
 		var manager = dataManager.getManager(table, config);
-		
+		manager.initTable();
 		
 		return tb;
 	});
