@@ -1,11 +1,6 @@
 module.exports = function(app, db, sessions){
 	var path = "/api/walls/:wallId/notes/";
 	
-	app.param("wallId", function(req, res, next, wallId){
-		req.wallId = wallId;
-		next();
-	});
-	
 	app.get(path, function(req, res){
 		db.get({
 			coll:		"notes",

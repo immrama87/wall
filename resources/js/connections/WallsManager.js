@@ -20,6 +20,21 @@ define("connectionManager/WallsManager", ["wallManager"], function(WallManager){
 		wv.load = function(){
 			renderWalls();
 		}
+		
+		wv.update = function(){
+			WindowManager.get(url + "/api/walls", {
+				success:	function(response){
+					var data = JSON.parse(response);
+					if(data.status == "success"){
+						walls = data.records;
+						renderWalls();
+					}
+					else {
+						alert(data.data);
+					}
+				}
+			});
+		}
 			
 		wv.add = function(){
 			WindowManager.loadModal("addWall", {
@@ -57,14 +72,10 @@ define("connectionManager/WallsManager", ["wallManager"], function(WallManager){
 		}
 		
 		function renderWalls(){
-			var divs = wallFrame.getElementsByClassName("wall-icon");
-			
-			while(divs[0]){
-				wallFrame.removeChild(divs[0]);
-			}
+			wallFrame.innerHTML = "";
 			
 			for(var i=0;i<walls.length;i++){
-				wallFrame.appendChild(generateWallDiv(walls[i], url));
+				wallFrame.appendChild(generateWallDiv(walls[i], url, wv));
 			}
 			
 			var clearFix = document.createElement("div");
@@ -74,7 +85,7 @@ define("connectionManager/WallsManager", ["wallManager"], function(WallManager){
 		}
 	}
 	
-	function generateWallDiv(wall, url){
+	function generateWallDiv(wall, url, manager){
 		var container = document.createElement("div");
 		container.className = "col-xs-6 col-md-3";
 		
@@ -103,12 +114,46 @@ define("connectionManager/WallsManager", ["wallManager"], function(WallManager){
 		buttons.className = "buttons";
 		
 		var editBtn = document.createElement("div");
-		editBtn.className = "edit";
+		editBtn.className = "fa fa-pencil-square-o";
 		buttons.appendChild(editBtn);
 		
+		editBtn.onclick = function(evt){
+			evt.stopPropagation();
+			WindowManager.loadModal("wallSettings", {
+				getDetails:	function(){
+					return {
+						wallId: wall._id,
+						url:	url
+					};
+				}
+			});
+		}
+		
 		var delBtn = document.createElement("div");
-		delBtn.className = "delete";
+		delBtn.className = "fa fa-times";
 		buttons.appendChild(delBtn);
+		
+		delBtn.onclick = function(evt){
+			evt.stopPropagation();
+			
+			var conf = confirm("Delete " + wall.Name + "? This cannot be undone.");
+			if(conf){
+				WindowManager.del(url + "/api/walls/" + wall._id, undefined, {
+					success:	function(data){
+						var response = JSON.parse(data);
+						if(response.status == "success"){
+							manager.update();
+						}
+						else {
+							alert(response.data);
+						}
+					},
+					error:	function(status, text){
+						alert(text);
+					}
+				});
+			}
+		}
 		
 		div.appendChild(buttons);
 		

@@ -54,7 +54,7 @@ div#windows ul#windowList li:hover div.delete{
 
 div#connections{
 	font-family:'PT Sans', sans-serif;
-	color:#617FD6;
+	color:#A6B4FF;
 }
 
 div#connections ul{
@@ -76,8 +76,7 @@ div#connections ul li{
 }
 
 div#connections ul li:hover{
-	border:1px solid #999999;
-	background:#B7BACA;
+	background:#A6B4FF;
 	color:#FFFFFF;
 	font-weight:bold;
 	transition:border 0.1s, background 0.1s, color 0.1s, font-weight 0.1s;
@@ -86,10 +85,11 @@ div#connections ul li:hover{
 div#connections ul li div.delete{
 	margin-top:0.25em;
 	visibility:hidden;
+	text-align:center;
 }
 
 div#connections ul li:hover div.delete{
-	color:#617FD6;
+	color:#FF6666;
 	visibility:visible;
 }
 
@@ -116,7 +116,7 @@ div#walls div#wallsList{
 div#walls h1{
 	margin-left:1em;
 	margin-top:1em;
-	color:#617FD6;
+	color:#A6B4FF;
 	font-size:2em;
 	font-weight:normal;
 }
@@ -125,7 +125,7 @@ div.wall-icon{
 	margin-bottom:3em;
 	text-align:center;
 	border-radius:1.5em;
-	background:#A6B4DD;
+	background:#A6B4FF;
 	color:#FFFFFF;
 	cursor:pointer;
 	padding:1em;
@@ -133,7 +133,7 @@ div.wall-icon{
 
 div.wall-icon:hover{
 	background:#FF6666;
-	transition:background 0.15s;
+	transition:background 0.2s ease;
 }
 
 div.wall-icon p{
@@ -155,17 +155,15 @@ div.wall-icon:hover div.buttons{
 div.wall-icon div.buttons div{
 	width:2em;
 	height:2em;
+	font-size:1.5em;
 	margin-right:0.5em;
 	margin-left:0.5em;
 	display:inline-block;
+	transition:color 0.2s ease;
 }
 
-div.wall-icon div.buttons div.delete{
-	background:url("../svg/delete.svg");
-}
-
-div.wall-icon div.buttons div.edit{
-	background:url("../svg/edit.svg");
+div.wall-icon div.buttons div:hover{
+	color:#A6B4FF;
 }
 
 div#wall-frame{
@@ -204,6 +202,11 @@ div#functions div#menu-slide{
 	border-top-left-radius:0.5em;
 	border-bottom-left-radius:0.5em;
 	cursor:pointer;
+	transition:color 0.4s ease;
+}
+
+div#functions div#menu-slide:hover{
+	color:#B366FF;
 }
 
 div#functions div.function-button{
@@ -218,7 +221,7 @@ div#functions div.function-button{
 }
 
 div#functions div.function-button:hover{
-	color:#6DD661;
+	color:#B366FF;
 	text-shadow:-0.1em 0.1em 0.25em rgba(0,0,0,0.1);
 }
 

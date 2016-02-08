@@ -240,7 +240,7 @@ module.exports = function(){
 	
 	function sanitizeQuery(query){
 		if(query.hasOwnProperty("_id")){
-			query["_id"] = new mongo.ObjectID(query["_id"]);
+			query["_id"] = mongo.ObjectID.createFromHexString(query["_id"]);
 		}
 		
 		if(query.hasOwnProperty("$or")){

@@ -1,5 +1,5 @@
 module.exports = function(app, db, sessions){
-	var path = "/api/walls";
+	var path = "/api/walls/";
 	app.get(path, function(req, res){
 		db.get({
 			coll:		"walls",
@@ -35,6 +35,21 @@ module.exports = function(app, db, sessions){
 						}
 					});
 				}
+			}
+		});
+	});
+	
+	app.param("wallId", function(req, res, next, id){
+		req.wallId = id;
+		next();
+	});
+	
+	app.delete(path + ":wallId", function(req, res){
+		db.delete({
+			coll:		"walls",
+			query:		{"_id":	req.wallId},
+			callback:	function(response){
+				res.send(JSON.stringify(response));
 			}
 		});
 	});
