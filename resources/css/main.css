@@ -110,7 +110,7 @@ div#walls{
 
 div#walls div#wallsList{
 	overflow-y:auto;
-	height:calc(100% - 2em);
+	height:85%;
 }
 
 div#walls h1{
