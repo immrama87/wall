@@ -126,12 +126,9 @@ define("connectionManager/ConnectionManager", ["connectionManager/WallsManager"]
 					});
 				}
 				else if(response.status == "success"){
-					if(WindowManager.hasWindow(name + " - Walls")){
-						WindowManager.openWindow(name + " - Walls");
-					}
-					else {
+					WindowManager.check(name + " - Walls", function(){
 						WallsManager.create(name, url, response.records).init();
-					}
+					});
 				}
 				else {
 					alert(response.data);

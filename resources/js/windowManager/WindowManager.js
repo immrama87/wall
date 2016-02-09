@@ -59,8 +59,13 @@ define("windowManager/WindowManager", ["windowManager/Modals", "windowManager/Aj
 		addWindowTab(name);
 	}
 	
-	wm.hasWindow = function(name){
-		return windows.hasOwnProperty(name);
+	wm.check = function(name, fallback){
+		if(windows.hasOwnProperty(name)){
+			wm.openWindow(name);
+		}
+		else {
+			fallback();
+		}
 	}
 	
 	wm.openWindow = function(name){

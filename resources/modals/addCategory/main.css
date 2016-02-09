@@ -1,0 +1,12 @@
+div.modal{
+	left:25%;
+	top:25%;
+	width:50%;
+}
+
+div.modal select span{
+	display:inline-block;
+	width:1em;
+	height:1em;
+	border:1px solid black;
+}

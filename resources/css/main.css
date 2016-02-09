@@ -388,7 +388,7 @@ div.modal p{
 	font-weight:bold;
 }
 
-div.modal p input, div.modal p textarea{
+div.modal p input, div.modal p textarea, div.modal p select{
 	float:right;
 	width:75%;
 	border:none;
@@ -419,11 +419,11 @@ div.modal button{
 	color:#FFFFFF;
 	border-radius:0.25em;
 	border:none;
-	width:5em;
 	height:2em;
 	font-size:1em;
 	font-weight:bold;
 	cursor:pointer;
+	outline:none;
 }
 
 div.modal a.button-link{

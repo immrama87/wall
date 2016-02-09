@@ -1,10 +1,5 @@
 module.exports = function(app, db, sessions){
-	var path = "/api/walls/:wallId/categories";
-	
-	app.param("wallId", function(req, res, next, wallId){
-		req.wallId = wallId;
-		next();
-	});
+	var path = "/api/walls/:wallId/categories/";
 	
 	app.get(path, function(req, res){
 		db.get({
@@ -65,5 +60,52 @@ module.exports = function(app, db, sessions){
 		next();
 	});
 	
+	app.get(path + ":catId", function(req, res){
+		db.get({
+			coll:		"categories",
+			query:		{_id:	req.catId},
+			fields:		["Color", "Name"],
+			callback:	function(data){
+				res.send(JSON.stringify(data));
+			}
+		});
+	});
 	
+	app.put(path + ":catId", function(req, res){
+		db.update({
+			coll:		"categories",
+			query:		{_id:	req.catId},
+			data:		req.body,
+			callback:	function(response){
+				res.send(JSON.stringify(response));
+			}
+		});
+	});
+	
+	app.delete(path + ":catId", function(req, res){
+		db.get({
+			coll:		"categories",
+			query:		{WallID: req.wallId},
+			fields:		[],
+			callback:	function(get){
+				if(get.metadata.size > 1){
+					db.delete({
+						coll:		"categories",
+						query:		{_id:	req.catId},
+						callback:	function(response){
+							res.send(JSON.stringify(response));
+						}
+					});
+				}
+				else {
+					var response = {
+						status:	"error",
+						data:	"You cannot delete the last category on a Wall."
+					};
+					
+					res.send(JSON.stringify(response));
+				}
+			}
+		});
+	});
 }

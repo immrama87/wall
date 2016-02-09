@@ -1,4 +1,6 @@
 var controller = (function(target){
+	var details = target.catTable.getDetails();
+	var table;
 	target.init = function(){
 		target.nav.select("categories");
 		
@@ -6,83 +8,107 @@ var controller = (function(target){
 	}
 	
 	function loadTable(){
-		var details = target.catTable.getDetails();
-		
-		WindowManager.Tabulator.create(target.catTable, {
-			cols:	[
+		table = $(target.catTable).DataTable({
+			info:			false,
+			searching:		false,
+			lengthChange:	false,
+			pagingType:		"numbers",
+			rowId:			"2",
+			columns:		[
 				{
-					name:		"Name",
-					sortable:	true,
-					key:		"Name"
+					title:		"Name",
+					name:		"Name"
 				},
 				{
-					name:		"Color",
-					sortable:	true,
-					key:		"Color",
-					format:		"<div class='color-div' style='background-color:#{{data}}'></div>#{{data}}"
+					title:		"Color",
+					name:		"Color"
+				},
+				{
+					name: 		"_id",
+					visible:	false					
+				},
+				{
+					title:			"",
+					sortable:		false,
+					className:		"delete-row",
+					defaultContent:	"<i class='fa fa-times'></i>"
 				}
 			]
 		});
 		
+		$(target.catTable).find("tbody").on("click touch touchstart", "tr", function(){
+			if($(this).hasClass("selected")){
+				$(this).removeClass("selected");
+				$(target.addCategory).html("Add Category");
+			}
+			else {
+				$(target.catTable).find("tr.selected").removeClass("selected");
+				$(this).addClass("selected");
+				$(target.addCategory).text("Update Category");
+			}
+		});
+		
+		$(target.addCategory).on("click touch touchstart", function(){
+			var id;
+			if($(target.catTable).find("tr.selected").length > 0){
+				id = $(target.catTable).find("tr.selected")[0].id;
+			}
+			
+			WindowManager.loadModal("addCategory", {
+				getDetails:	function(){
+					return {
+						wallId:	details.wallId,
+						catId:	id,
+						url:	details.url
+					};
+				},
+				close:		updateTable
+			});
+		});
+		
+		
+		updateTable();
+	}
+	
+	function updateTable(){
 		WindowManager.get(details.url + "/api/walls/" + details.wallId + "/categories", {
 			success:	function(data){
 				var response = JSON.parse(data);
 				if(response.status == "success"){
-					//generateTable(response.records);
+					table.data().clear().draw();
+					for(var i=0;i<response.records.length;i++){
+						var row = [response.records[i].Name, generateColorCellHTML(response.records[i].Color), response.records[i]._id];
+						table.row.add(row);
+					}
+					
+					table.draw();
+					
+					$(target.catTable).find("td.delete-row").on("click touch touchstart", function(evt){
+						var catId = $(this).parents("tr")[0].id;
+						
+						WindowManager.del(details.url + "/api/walls/" + details.wallId + "/categories/" + catId, undefined, {
+							success:	function(data){
+								var response = JSON.parse(data);
+								if(response.status == "success"){
+									$(target.addCategory).html("Add Category");
+									updateTable();
+								}
+								else {
+									alert(response.data);
+								}
+							}
+						});
+					});
 				}
 			}
 		});
 	}
 	
-	function generateTable(categories){
-		var thead = document.createElement("thead");
-		var tbody = document.createElement("tbody");
-		
-		var headerRow = document.createElement("tr");
-		var colorCell = document.createElement("th");
-		colorCell.appendChild(document.createTextNode("Color"));
-		headerRow.appendChild(colorCell);
-		
-		var nameCell = document.createElement("th");
-		nameCell.appendChild(document.createTextNode("Name"));
-		headerRow.appendChild(nameCell);
-		thead.appendChild(headerRow);
-		
-		for(var i=0;i<categories.length;i++){
-			tbody.appendChild(createRow(categories[i]));
-		}
-		
-		for(var j=categories.length;j<10;j++){
-			tbody.appendChild(createRow(undefined));
-		}
-		
-		target.catTable.appendChild(thead);
-		target.catTable.appendChild(tbody);
-	}
-	
-	function createRow(category){
-		var name, color;
-		if(category != undefined){
-			name = category.Name;
-			color = category.Color;
-		}
-		else {
-			name = color = "";
-		}
-		
-		var tr = document.createElement("tr");
-		var colorCell = document.createElement("td");
+	function generateColorCellHTML(color){
 		var colorDiv = document.createElement("div");
 		colorDiv.className = "color-div";
 		colorDiv.style.background = color;
-		colorCell.appendChild(colorDiv);
-		colorCell.appendChild(document.createTextNode(color));
-		tr.appendChild(colorCell);
 		
-		var nameCell = document.createElement("td");
-		nameCell.appendChild(document.createTextNode(name));
-		tr.appendChild(nameCell);
-		
-		return tr;
+		return colorDiv.outerHTML + "&nbsp;" + color;
 	}
 });
