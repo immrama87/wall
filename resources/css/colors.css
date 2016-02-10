@@ -1,0 +1,68 @@
+div#windows ul#windowList li {
+  background: #EEEEEE; }
+
+div#connections {
+  color: #A6B4FF; }
+
+div#connections ul li:hover {
+  background: #A6B4FF;
+  color: #FFFFFF; }
+
+div#connections ul li:hover div.delete {
+  color: #FF6666; }
+
+div#connections ul li:hover div.delete:hover {
+  color: #FFFFFF; }
+
+div#walls h1 {
+  color: #A6B4FF; }
+
+div.wall-icon {
+  background: #A6B4FF;
+  color: #FFFFFF; }
+
+div.wall-add {
+  border-color: #CCCCCC;
+  color: #CCCCCC; }
+
+div.wall-add:hover {
+  border-color: #888888;
+  color: #888888; }
+
+div.wall-icon:hover {
+  background: #FF6666; }
+
+div.wall-icon div.buttons div:hover {
+  color: #FF6666; }
+
+div#functions {
+  background: #FF6666; }
+
+div#functions div#menu-slide {
+  background: #FF6666;
+  color: #FFEEEE; }
+
+div#functions div#menu-slide:hover {
+  color: #990000; }
+
+div#functions div.function-button {
+  color: #FFEEEE; }
+
+div#functions div.function-button:hover {
+  color: #990000; }
+
+div.editor h4.noComments {
+  color: #888888; }
+
+div.modal-background {
+  background: rgba(0, 0, 0, 0.1); }
+
+div.modal {
+  background: #FF6666;
+  color: #333333; }
+
+div.modal button {
+  background: #6A8C64;
+  color: #FFFFFF; }
+
+/*# sourceMappingURL=colors.css.map */

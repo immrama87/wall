@@ -22,7 +22,6 @@ div#windows ul#windowList li{
 	display:inline-block;
 	text-align:center;
 	border:1px solid black;
-	background:#EEEEEE;
 	border-top:none;
 	border-bottom-left-radius:0.5em;
 	border-bottom-right-radius:0.5em;
@@ -54,7 +53,6 @@ div#windows ul#windowList li:hover div.delete{
 
 div#connections{
 	font-family:'PT Sans', sans-serif;
-	color:#A6B4FF;
 }
 
 div#connections ul{
@@ -71,13 +69,10 @@ div#connections ul li{
 	padding-left:1em;
 	width:70%;
 	cursor:pointer;
-	border:1px solid #FFFFFF;
 	border-radius:0.5em;
 }
 
 div#connections ul li:hover{
-	background:#A6B4FF;
-	color:#FFFFFF;
 	font-weight:bold;
 	transition:border 0.1s, background 0.1s, color 0.1s, font-weight 0.1s;
 }
@@ -89,12 +84,10 @@ div#connections ul li div.delete{
 }
 
 div#connections ul li:hover div.delete{
-	color:#FF6666;
 	visibility:visible;
 }
 
 div#connections ul li:hover div.delete:hover{
-	color:#FFFFFF;
 	transition:color 0.1s;
 }
 
@@ -116,7 +109,6 @@ div#walls div#wallsList{
 div#walls h1{
 	margin-left:1em;
 	margin-top:1em;
-	color:#A6B4FF;
 	font-size:2em;
 	font-weight:normal;
 }
@@ -126,8 +118,6 @@ div.wall-icon{
 	height:14em;
 	text-align:center;
 	border-radius:1.5em;
-	background:#A6B4FF;
-	color:#FFFFFF;
 	cursor:pointer;
 	padding:1em;
 }
@@ -137,16 +127,10 @@ div.wall-add{
 	padding:1em;
 	background:none;
 	border-radius:1.5em;
-	border:0.25em dashed #CCCCCC;
-	color:#CCCCCC;
+	border:0.25em dashed;
 	text-align:center;
 	transition:color 0.2s ease, border-color 0.2s ease;
 	cursor:pointer;
-}
-
-div.wall-add:hover{
-	border-color:#888888;
-	color:#888888;
 }
 
 div.wall-add i{
@@ -155,7 +139,6 @@ div.wall-add i{
 }
 
 div.wall-icon:hover{
-	background:#FF6666;
 	transition:background 0.2s ease;
 }
 
@@ -189,10 +172,6 @@ div.wall-icon div.buttons div{
 	transition:color 0.2s ease;
 }
 
-div.wall-icon div.buttons div:hover{
-	color:#A6B4FF;
-}
-
 div#wall-frame{
 	width:100%;
 	height:100%;
@@ -213,7 +192,6 @@ div#functions{
 	top:0;
 	width:5em;
 	height:100%;
-	background:#FF6666;
 	box-shadow:-0.25em 0em 0.25em rgba(0,0,0,0.2);
 	transition:right 0.4s ease;
 }
@@ -223,17 +201,11 @@ div#functions div#menu-slide{
 	font-size:2em;
 	right:2.5em;
 	top:0.5em;
-	background:#FF6666;
-	color:#FFEEEE;
 	padding:0 0.25em 0 0.5em;
 	border-top-left-radius:0.5em;
 	border-bottom-left-radius:0.5em;
 	cursor:pointer;
 	transition:color 0.4s ease;
-}
-
-div#functions div#menu-slide:hover{
-	color:#B366FF;
 }
 
 div#functions div.function-button{
@@ -243,12 +215,10 @@ div#functions div.function-button{
 	margin-top:0.5em;
 	font-size:4em;
 	text-align:center;
-	color:#FFEEEE;
 	transition: color 0.25s ease, text-shadow 0.25s ease;
 }
 
 div#functions div.function-button:hover{
-	color:#B366FF;
 	text-shadow:-0.1em 0.1em 0.25em rgba(0,0,0,0.1);
 }
 
@@ -343,7 +313,6 @@ div.editor table{
 }
 
 div.editor h4.noComments{
-	color:#888888;
 	text-shadow:0.1em 0.1em rgba(0,0,0,0.25);
 	text-align:center;
 	font-size:2em;
@@ -368,10 +337,8 @@ div.modal-background div.loading{
 
 div.modal{
 	position:absolute;
-	background:#FF6666;
 	border-radius:1em;
 	font-family:'PT Sans', sans-serif;
-	color:#333333;
 	cursor:default;
 	display:block !important;
 	bottom:auto !important;
@@ -415,8 +382,6 @@ div.modal div.button-div{
 }
 
 div.modal button{
-	background:#6A8C64;
-	color:#FFFFFF;
 	border-radius:0.25em;
 	border:none;
 	height:2em;

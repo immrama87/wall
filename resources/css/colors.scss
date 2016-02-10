@@ -1,0 +1,99 @@
+$background-gray:	#EEEEEE;
+$light-gray:		#CCCCCC;
+$gray:				#888888;
+$dark-gray:			#333333;
+$blue:				#A6B4FF;
+$white:				#FFFFFF;
+$red:				#FF6666;
+$light-red:			#FFEEEE;
+$purple:			#B366FF;
+$green:				#6A8C64;
+
+$shadow-light:		rgba(0,0,0,0.1);
+
+div#windows ul#windowList li{
+	background:$background-gray;
+}
+
+div#connections{
+	color:$blue;
+}
+
+div#connections ul li:hover{
+	background:$blue;
+	color:$white;
+}
+
+div#connections ul li:hover div.delete{
+	color:$red;
+}
+
+div#connections ul li:hover div.delete:hover{
+	color:$white;
+}
+
+div#walls h1{
+	color:$blue;
+}
+
+div.wall-icon{
+	background:$blue;
+	color:$white;
+}
+
+div.wall-add{
+	border-color:$light-gray;
+	color:$light-gray;
+}
+
+div.wall-add:hover{
+	border-color:$gray;
+	color:$gray;
+}
+
+div.wall-icon:hover{
+	background:$red;
+}
+
+div.wall-icon div.buttons div:hover{
+	color:$red;
+}
+
+div#functions{
+	background:$red;
+}
+
+div#functions div#menu-slide{
+	background:$red;
+	color:$light-red;
+}
+
+div#functions div#menu-slide:hover{
+	color:darken($red, 40%);
+}
+
+div#functions div.function-button{
+	color:$light-red;
+}
+
+div#functions div.function-button:hover{
+	color:darken($red, 40%);
+}
+
+div.editor h4.noComments{
+	color:$gray;
+}
+
+div.modal-background{
+	background:$shadow-light;
+}
+
+div.modal{
+	background:$red;
+	color:$dark-gray;
+}
+
+div.modal button{
+	background:$green;
+	color:$white;
+}
