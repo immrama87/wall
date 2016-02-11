@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link href='https://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" type="text/css" href="/help/css/main.css" />
+		
+		<script type="application/javascript" src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+		<script type="application/javascript" src="/help/js/login.js"></script>
+	</head>
+	<body>
+		<header>
+			<h1>REST API Documentation for the Wall</h1>
+		</header>
+		<section class="main">
+			<section class="login">
+				<h4>Please login to view the documentation.</h4>
+				<div class="param-field">
+					<div class="param-label">UserName</div>
+					<div class="param-value">
+						<input type="text" />
+					</div>
+				</div>
+				
+				<div class="param-field">
+					<div class="param-label">Password</div>
+					<div class="param-value">
+						<input type="password"/>
+					</div>
+				</div>
+				
+				<button end-point="/api/users/login" method="POST" id="login-button">Login</button>
+			</section>
+		</section>
+	</body>
+</html>

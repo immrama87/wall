@@ -2,24 +2,37 @@ div#windows ul#windowList li {
   background: #EEEEEE; }
 
 div#connections {
-  color: #A6B4FF; }
+  color: #3E86B2; }
 
 div#connections ul li:hover {
-  background: #A6B4FF;
+  background: #3E86B2;
   color: #FFFFFF; }
 
 div#connections ul li:hover div.delete {
-  color: #FF6666; }
+  color: #FFFFFF; }
 
 div#connections ul li:hover div.delete:hover {
-  color: #FFFFFF; }
+  color: #FF6666; }
 
 div#walls h1 {
-  color: #A6B4FF; }
+  color: #3E86B2; }
 
 div.wall-icon {
-  background: #A6B4FF;
+  background: #3E86B2;
   color: #FFFFFF; }
+
+div.wall-icon div.buttons {
+  color: transparent; }
+
+div.wall-icon:hover {
+  background: #FF6666;
+  color: #244d66; }
+
+div.wall-icon:hover div.buttons {
+  color: #ffcccc; }
+
+div.wall-icon div.buttons div:hover {
+  color: #990000; }
 
 div.wall-add {
   border-color: #CCCCCC;
@@ -29,12 +42,6 @@ div.wall-add:hover {
   border-color: #888888;
   color: #888888; }
 
-div.wall-icon:hover {
-  background: #FF6666; }
-
-div.wall-icon div.buttons div:hover {
-  color: #FF6666; }
-
 div#functions {
   background: #FF6666; }
 
@@ -43,13 +50,13 @@ div#functions div#menu-slide {
   color: #FFEEEE; }
 
 div#functions div#menu-slide:hover {
-  color: #990000; }
+  color: #244d66; }
 
 div#functions div.function-button {
   color: #FFEEEE; }
 
 div#functions div.function-button:hover {
-  color: #990000; }
+  color: #244d66; }
 
 div.editor h4.noComments {
   color: #888888; }

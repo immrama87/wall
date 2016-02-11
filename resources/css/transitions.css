@@ -1,0 +1,28 @@
+div#connections ul li:hover {
+  transition: border 0.1s ease, background 0.1s ease, color 0.1s ease, font-weight 0.1s ease; }
+
+div#connections ul li:hover div.delete:hover {
+  transition: color 0.1s ease; }
+
+div.wall-add {
+  transition: color 0.2s ease, border-color 0.2s ease; }
+
+div.wall-icon:hover {
+  transition: background 0.2s ease; }
+
+div.wall-icon:hover div.buttons {
+  transition: visibility 0.1s ease; }
+
+div.wall-icon div.buttons div {
+  transition: color 0.2s ease; }
+
+div#functions {
+  transition: right 0.4s ease; }
+
+div#functions div#menu-slide {
+  transition: color 0.4s ease; }
+
+div#functions div.function-button {
+  transition: color 0.2s ease, text-shadow 0.2s ease; }
+
+/*# sourceMappingURL=transitions.css.map */

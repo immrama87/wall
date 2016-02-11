@@ -1,0 +1,203 @@
+body, html{
+	padding:0;
+	margin:0;
+	text-align:center;
+	font-family: 'PT Sans', sans-serif;
+	background:#EEEEEE;
+	height:100%;
+	overflow:hidden;
+}
+
+header{
+	background:#FF6666;
+	color:#EEEEEE;
+	position:fixed;
+	height:6%;
+	text-align:center;
+	width:100%;
+	border-top:1em solid #EEEEEE;
+}
+
+section.login{
+	width:50%;
+	background:white;
+	margin:0 auto;
+	padding:1em;
+	border-radius:0.5em;
+	box-shadow:0.5em 0.5em 0.5em rgba(0,0,0,0.1);
+}
+
+section.main h4, section.login h4{
+	color:#3E86B2;
+}
+
+section.main ul.nav{
+	width:50%;
+	list-style-type:none;
+	background:white;
+	margin:0 auto;
+	padding:1em;
+	border-radius:0.5em;
+	box-shadow:0.5em 0.5em 0.5em rgba(0,0,0,0.1);
+}
+
+nav.sidebar{
+	position:fixed;
+	top:8%;
+	height:90%;
+	text-align:left;
+	padding:1em;
+	border-top-right-radius:0.5em;
+	border-bottom-right-radius:0.5em;
+	overflow-y:auto;
+}
+
+nav.sidebar a{
+	margin:0.5em 0;
+	display:inline-block;
+}
+
+section.main ul.nav>li{
+	padding:0.5em 0;
+	width:50%;
+	display:block;
+	margin:0 auto;
+}
+
+section.main ul.nav>li:hover{
+	background:#3E86B2;
+}
+
+section.main ul.nav>li>a{
+	text-decoration:none;
+	color:#3E86B2;
+}
+
+section.main ul.nav>li:hover>a{
+	color:white;
+	font-weight:bold;
+}
+
+section.routes, section.main{
+	height:92%;
+	margin-top:4%;
+	overflow-y:auto;
+	padding-top:1em;
+}
+
+section.routes div.route{
+	width:50%;
+	margin:0 auto;
+	padding:0.5em;
+	text-align:left;
+	background:white;
+	border-radius:0.5em;
+	box-shadow:0.5em 0.5em 0.5em rgba(0,0,0,0.1);
+	margin-bottom:2em;
+}
+div.param-field{
+	margin-bottom:0.5em;
+}
+
+section.routes div.param-field{
+	width:50%;
+}
+
+section.login div.param-field{
+	width:100%;
+}
+
+div.param-field div.param-label{
+	width:33%;
+	display:inline-block;
+	text-align:left;
+}
+
+div.param-field div.param-value{
+	width:60%;
+	display:inline-block;
+}
+
+div.param-field div.param-value input{
+	width:100%;
+	padding:0.5em;
+	display:inline-block;
+	vertical-align:middle;
+	border-radius:0.5em;
+	outline:none;
+}
+
+section.routes div.route button, section.login button{
+	cursor:not-allowed;
+	background:#FF6666;
+	color:white;
+	border:none;
+	padding:1em;
+	border-radius:0.5em;
+	font-weight:bold;
+	outline:none;
+}
+
+section.routes div.route button.enabled, section.login button.enabled{
+	background:#6FCC3D;
+	cursor:pointer;
+}
+
+section.routes div.route div.output{
+	height:10em;
+	width:calc(100% - 1em);
+	margin-top:0.5em;
+	border-radius:0.5em;
+	padding:0.5em;
+	overflow-y:auto;
+	background:#CCCCCC;
+	box-shadow:inset 0.25em 0.25em 0.25em rgba(0, 0, 0, 0.1);
+}
+
+section.routes div.route div.output.results{
+	background:white;
+}
+
+section.routes div.route div.output.results ul{
+	list-style-type:none;
+}
+
+section.routes div.route div.output.results ul>li{
+	color:#3E86B2;
+}
+
+section.routes div.route div.output.results ul>li.object-li:before{
+	display:inline-block;
+	width:	0;
+	height:	0;
+	border-top:	solid transparent;
+	border-bottom: solid transparent;
+	border-left: solid #3E86B2;
+	border-width:5px;
+	content: " ";
+	margin-right:5px;
+}
+
+section.routes div.route div.output.results ul>li.object-li.open:before{
+	transform:rotate(90deg);
+}
+
+section.routes div.route div.output.results ul>li.object-li>ul{
+	display:none;
+}
+
+section.routes div.route div.output.results ul>li.object-li.open>ul{
+	display:block;
+}
+
+section.routes div.route div.output.results ul>li span.value{
+	color:#FF6666;
+}
+
+section.routes div.route div.output.error{
+	color:#FF6666;
+}
+
+p.no-submit, div.warning{
+	color:#FF6666;
+}

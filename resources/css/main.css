@@ -23,8 +23,6 @@ div#windows ul#windowList li{
 	text-align:center;
 	border:1px solid black;
 	border-top:none;
-	border-bottom-left-radius:0.5em;
-	border-bottom-right-radius:0.5em;
 	cursor:pointer;
 	margin-top:-0.1em;
 }
@@ -69,12 +67,10 @@ div#connections ul li{
 	padding-left:1em;
 	width:70%;
 	cursor:pointer;
-	border-radius:0.5em;
 }
 
 div#connections ul li:hover{
 	font-weight:bold;
-	transition:border 0.1s, background 0.1s, color 0.1s, font-weight 0.1s;
 }
 
 div#connections ul li div.delete{
@@ -85,10 +81,6 @@ div#connections ul li div.delete{
 
 div#connections ul li:hover div.delete{
 	visibility:visible;
-}
-
-div#connections ul li:hover div.delete:hover{
-	transition:color 0.1s;
 }
 
 div#connections ul li span{
@@ -117,7 +109,6 @@ div.wall-icon{
 	margin-bottom:3em;
 	height:14em;
 	text-align:center;
-	border-radius:1.5em;
 	cursor:pointer;
 	padding:1em;
 }
@@ -126,20 +117,14 @@ div.wall-add{
 	height:14em;
 	padding:1em;
 	background:none;
-	border-radius:1.5em;
 	border:0.25em dashed;
 	text-align:center;
-	transition:color 0.2s ease, border-color 0.2s ease;
 	cursor:pointer;
 }
 
 div.wall-add i{
 	font-size:4em;
 	margin:0.25em 0;
-}
-
-div.wall-icon:hover{
-	transition:background 0.2s ease;
 }
 
 div.wall-icon h2{
@@ -159,7 +144,6 @@ div.wall-icon div.buttons{
 
 div.wall-icon:hover div.buttons{
 	visibility:visible;
-	transition:visibility 0.15s;
 }
 
 div.wall-icon div.buttons div{
@@ -169,7 +153,6 @@ div.wall-icon div.buttons div{
 	margin-right:0.5em;
 	margin-left:0.5em;
 	display:inline-block;
-	transition:color 0.2s ease;
 }
 
 div#wall-frame{
@@ -193,7 +176,6 @@ div#functions{
 	width:5em;
 	height:100%;
 	box-shadow:-0.25em 0em 0.25em rgba(0,0,0,0.2);
-	transition:right 0.4s ease;
 }
 
 div#functions div#menu-slide{
@@ -202,10 +184,7 @@ div#functions div#menu-slide{
 	right:2.5em;
 	top:0.5em;
 	padding:0 0.25em 0 0.5em;
-	border-top-left-radius:0.5em;
-	border-bottom-left-radius:0.5em;
 	cursor:pointer;
-	transition:color 0.4s ease;
 }
 
 div#functions div.function-button{
@@ -215,7 +194,6 @@ div#functions div.function-button{
 	margin-top:0.5em;
 	font-size:4em;
 	text-align:center;
-	transition: color 0.25s ease, text-shadow 0.25s ease;
 }
 
 div#functions div.function-button:hover{
@@ -274,7 +252,6 @@ div.editor textarea{
 	width:99%;
 	height:4em;
 	resize:none;
-	border-radius:0.5em;
 	font-family:'PT Sans', sans-serif;
 	background:rgba(255,255,255,0.5);
 	outline:none;
@@ -337,7 +314,6 @@ div.modal-background div.loading{
 
 div.modal{
 	position:absolute;
-	border-radius:1em;
 	font-family:'PT Sans', sans-serif;
 	cursor:default;
 	display:block !important;
@@ -359,7 +335,6 @@ div.modal p input, div.modal p textarea, div.modal p select{
 	float:right;
 	width:75%;
 	border:none;
-	border-radius:0.5em;
 	padding:0 0.5em;
 	outline:none;
 	box-shadow:inset 0.25em 0.25em 0.1em rgba(0,0,0,0.2);
@@ -382,7 +357,6 @@ div.modal div.button-div{
 }
 
 div.modal button{
-	border-radius:0.25em;
 	border:none;
 	height:2em;
 	font-size:1em;

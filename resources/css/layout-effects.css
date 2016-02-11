@@ -1,0 +1,30 @@
+div#windows ul#windowList li {
+  border-bottom-left-radius: 0.5em;
+  border-bottom-right-radius: 0.5em; }
+
+div#connections ul li {
+  border-radius: 0.5em; }
+
+div.wall-icon {
+  border-radius: 1em; }
+
+div.wall-add {
+  border-radius: 1em; }
+
+div#functions div#menu-slide {
+  border-top-left-radius: 0.5em;
+  border-bottom-left-radius: 0.5em; }
+
+div.editor textarea {
+  border-radius: 0.5em; }
+
+div.modal {
+  border-radius: 1em; }
+
+div.modal p input, div.modal p textarea, div.modal p select {
+  border-radius: 0.5em; }
+
+div.modal button {
+  border-radius: 0.25em; }
+
+/*# sourceMappingURL=layout-effects.css.map */

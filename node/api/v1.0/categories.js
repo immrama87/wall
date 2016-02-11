@@ -1,6 +1,13 @@
 module.exports = function(app, db, sessions){
 	var path = "/api/walls/:wallId/categories/";
 	
+	/**
+	 *	method:	GET
+	 *	path:	/api/walls/{wallId}/categories/
+	 *	description:	Used to retrieve all of the categories configured for a given wall
+	 *	data:	wallId
+	 *	response:	Color, Name
+	 */
 	app.get(path, function(req, res){
 		db.get({
 			coll:		"categories",
@@ -12,6 +19,13 @@ module.exports = function(app, db, sessions){
 		});
 	});
 	
+	/**
+	 *	method:	POST
+	 *	path:	/api/walls/{wallId}/categories/
+	 *	description:	Used to create a new category configuration for a given wall
+	 *	data:	wallId, Name, Color
+	 *	route:	unsubmittable
+	 */
 	app.post(path, function(req, res){
 		var obj = req.body;
 		db.get({
@@ -60,6 +74,13 @@ module.exports = function(app, db, sessions){
 		next();
 	});
 	
+	/**
+	 *	method:	GET
+	 *	path:	/api/walls/{wallId}/categories/{catId}/
+	 *	description:	Used to retrieve the details of a given category for a given wall
+	 *	data:	wallId, catId
+	 *	response:	Color, Name
+	 */
 	app.get(path + ":catId", function(req, res){
 		db.get({
 			coll:		"categories",
@@ -71,6 +92,12 @@ module.exports = function(app, db, sessions){
 		});
 	});
 	
+	/**
+	 *	method:	PUT
+	 *	path:	/api/walls/{wallId}/categories/{catId}/
+	 *	description:	Used to update the configuration of a given category for a given wall
+	 *	data:	wallId, catId, Name--optional, Color--optional
+	 */
 	app.put(path + ":catId", function(req, res){
 		db.update({
 			coll:		"categories",
@@ -82,6 +109,13 @@ module.exports = function(app, db, sessions){
 		});
 	});
 	
+	/**
+	 *	method:	DELETE
+	 *	path:	/api/walls/{wallId}/categories/{catId}/
+	 *	description:	Used to delete a given category from a given wall.
+	 *	data:	wallId, catId
+	 *	route:	unsubmittable
+	 */
 	app.delete(path + ":catId", function(req, res){
 		db.get({
 			coll:		"categories",

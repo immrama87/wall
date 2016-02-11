@@ -1,0 +1,59 @@
+@mixin round-all($border-size){
+	border-radius:$border-size;
+}
+@mixin round-left($border-size){
+	border-top-left-radius:$border-size;
+	border-bottom-left-radius:$border-size;
+}
+@mixin round-right($border-size){
+	border-top-right-radius:$border-size;
+	border-bottom-left-radius:$border-size;
+}
+@mixin round-top($border-size){
+	border-top-left-radius:$border-size;
+	border-top-right-radius:$border-size;
+}
+@mixin round-bottom($border-size){
+	border-bottom-left-radius:$border-size;
+	border-bottom-right-radius:$border-size;
+}
+
+$border-radius-small: 0.25em;
+$border-radius: 0.5em;
+$border-radius-large: 1em;
+
+div#windows ul#windowList li{
+	@include round-bottom($border-radius);
+}
+
+div#connections ul li{
+	@include round-all($border-radius);
+}
+
+div.wall-icon{
+	@include round-all($border-radius-large);
+}
+
+div.wall-add{
+	@include round-all($border-radius-large);
+}
+
+div#functions div#menu-slide{
+	@include round-left($border-radius);
+}
+
+div.editor textarea{
+	@include round-all($border-radius);
+}
+
+div.modal{
+	@include round-all($border-radius-large);
+}
+
+div.modal p input, div.modal p textarea, div.modal p select{
+	@include round-all($border-radius);
+}
+
+div.modal button{
+	@include round-all($border-radius-small);
+}

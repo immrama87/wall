@@ -2,7 +2,7 @@ $background-gray:	#EEEEEE;
 $light-gray:		#CCCCCC;
 $gray:				#888888;
 $dark-gray:			#333333;
-$blue:				#A6B4FF;
+$blue:				#3E86B2;
 $white:				#FFFFFF;
 $red:				#FF6666;
 $light-red:			#FFEEEE;
@@ -25,11 +25,11 @@ div#connections ul li:hover{
 }
 
 div#connections ul li:hover div.delete{
-	color:$red;
+	color:$white;
 }
 
 div#connections ul li:hover div.delete:hover{
-	color:$white;
+	color:$red;
 }
 
 div#walls h1{
@@ -39,6 +39,23 @@ div#walls h1{
 div.wall-icon{
 	background:$blue;
 	color:$white;
+}
+
+div.wall-icon div.buttons{
+	color:transparent;
+}
+
+div.wall-icon:hover{
+	background:$red;
+	color:darken($blue, 20%);
+}
+
+div.wall-icon:hover div.buttons{
+	color:lighten($red, 20%);
+}
+
+div.wall-icon div.buttons div:hover{
+	color:darken($red, 40%);
 }
 
 div.wall-add{
@@ -51,14 +68,6 @@ div.wall-add:hover{
 	color:$gray;
 }
 
-div.wall-icon:hover{
-	background:$red;
-}
-
-div.wall-icon div.buttons div:hover{
-	color:$red;
-}
-
 div#functions{
 	background:$red;
 }
@@ -69,7 +78,7 @@ div#functions div#menu-slide{
 }
 
 div#functions div#menu-slide:hover{
-	color:darken($red, 40%);
+	color:darken($blue, 20%);
 }
 
 div#functions div.function-button{
@@ -77,7 +86,7 @@ div#functions div.function-button{
 }
 
 div#functions div.function-button:hover{
-	color:darken($red, 40%);
+	color:darken($blue, 20%);
 }
 
 div.editor h4.noComments{

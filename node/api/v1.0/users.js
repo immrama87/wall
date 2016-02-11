@@ -3,17 +3,29 @@ var crypto = require("crypto");
 module.exports = function(app, db, sessions){
 	var path = "/api/users/";
 	
+	/**
+	 *	method:			GET
+	 *	path:			/api/users/
+	 *	description: 	Retrieves a list of users on the current server.
+	 *	response:		FirstName, LastName, UserName
+	 */
 	app.get(path, function(req, res){
 		db.get({
 			coll:		"users",
 			fields:		["FirstName", "LastName", "UserName"],
 			query:		{},
 			callback:	function(data){
-				res.send(JSON.stringify(data));
+				res.end(JSON.stringify(data));
 			}
 		});
 	});
 	
+	/**
+	 *	method:			POST
+	 *	path:			/api/users/
+	 *	description:	Adds a new user to the database.
+	 *	data:			FirstName, LastName, UserName, Password
+	 */
 	app.post(path, function(req, res){
 		var obj = req.body;
 		
@@ -50,6 +62,13 @@ module.exports = function(app, db, sessions){
 		});
 	});
 	
+	/**
+	 *	method:			POST
+	 *	path:			/api/users/login/
+	 *	description:	Used to authenticate and establish a session to the API
+	 *	data:			UserName, Password
+	 *	route:			unsubmittable
+	 */
 	app.post(path + "login/", function(req, res){
 		var obj = req.body;
 		var response = {};
@@ -96,6 +115,13 @@ module.exports = function(app, db, sessions){
 		next();
 	});
 	
+	/**
+	 *	method:	GET
+	 *	path:	/api/users/{UserName}/
+	 *	description: Used to retrieve details about a given user.
+	 * 	response: FirstName, LastName, UserName, CreateDate, ModifiedDate, LastLogin
+	 *	data:	UserName
+	 */
 	app.get(path + ":id", function(req, res){
 		console.log(req.id);
 		db.get({
@@ -117,6 +143,12 @@ module.exports = function(app, db, sessions){
 		}
 	});
 	
+	/**
+	 *	method:	POST
+	 *	path:	/api/users/{UserName}/permissions/
+	 *	description:	Used to add a permission to a given user.
+	 *	data:	UserName, Permission
+	 */
 	app.post(path + ":id/permissions", function(req, res){
 		var obj = req.body;
 		db.addToArray({
@@ -133,6 +165,12 @@ module.exports = function(app, db, sessions){
 		});
 	});
 	
+	/**
+	 *	method:	PUT
+	 *	path:	/api/users/{UserName}/
+	 *	description: Used to update a given user.
+	 *	data:	UserName, FirstName--optional, LastName--optional
+	 */
 	app.put(path + ":id", function(req, res){
 		var obj = req.body;
 		var response = {};
@@ -166,6 +204,13 @@ module.exports = function(app, db, sessions){
 		});
 	});
 	
+	/**
+	 *	method:	PUT
+	 *	path:	/api/users/{UserName}/password/
+	 *	description:	Used to update a given user's password
+	 *	data:	UserName, OldPassword, NewPassword
+	 *	route:	unsubmittable
+	 */
 	app.put(path + ":id/password/", function(req, res){
 		var obj = req.body;
 		var response = {};
@@ -208,6 +253,13 @@ module.exports = function(app, db, sessions){
 		});
 	});
 	
+	/**
+	 *	method:	DELETE
+	 *	path:	/api/users/{UserName}/
+	 *	description:	Used to delete a given user
+	 *	data:	UserName
+	 *	route:	unsubmittable
+	 */
 	app.delete(path + ":id", function(req, res){
 		db.delete({
 			coll:		"users",

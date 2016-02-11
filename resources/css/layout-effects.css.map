@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAwBA,4BAA4B;EAR3B,yBAAyB,EAKV,KAAK;EAJpB,0BAA0B,EAIX,KAAK;;AAOrB,qBAAqB;EA3BpB,aAAa,EAoBE,KAAK;;AAWrB,aAAa;EA/BZ,aAAa,EAqBQ,GAAG;;AAczB,YAAY;EAnCX,aAAa,EAqBQ,GAAG;;AAkBzB,4BAA4B;EApC3B,sBAAsB,EAiBP,KAAK;EAhBpB,yBAAyB,EAgBV,KAAK;;AAuBrB,mBAAmB;EA3ClB,aAAa,EAoBE,KAAK;;AA2BrB,SAAS;EA/CR,aAAa,EAqBQ,GAAG;;AA8BzB,2DAA2D;EAnD1D,aAAa,EAoBE,KAAK;;AAmCrB,gBAAgB;EAvDf,aAAa,EAmBQ,MAAM",
+"sources": ["layout-effects.scss"],
+"names": [],
+"file": "layout-effects.css"
+}

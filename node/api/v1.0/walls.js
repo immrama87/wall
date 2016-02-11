@@ -1,5 +1,12 @@
 module.exports = function(app, db, sessions){
 	var path = "/api/walls/";
+	
+	/**
+	 *	method:	GET
+	 *	path:	/api/walls/
+	 *	description:	Used to retrieve a list of all walls
+	 *	response:	Name, Description
+	 */
 	app.get(path, function(req, res){
 		db.get({
 			coll:		"walls",
@@ -11,6 +18,12 @@ module.exports = function(app, db, sessions){
 		});
 	});
 	
+	/**
+	 *	method:	POST
+	 *	path:	/api/walls/
+	 *	description:	Used to create a new wall
+	 *	data:	Name
+	 */
 	app.post(path, function(req, res){
 		var obj = req.body;
 		db.get({
@@ -44,6 +57,13 @@ module.exports = function(app, db, sessions){
 		next();
 	});
 	
+	/**
+	 *	method:	DELETE
+	 *	path:	/api/walls/{wallId}
+	 *	description:	Used to delete a given wall
+	 *	data:	wallId
+	 *	route:	unsubmittable
+	 */
 	app.delete(path + ":wallId", function(req, res){
 		db.delete({
 			coll:		"walls",

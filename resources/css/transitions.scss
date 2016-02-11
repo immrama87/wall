@@ -1,0 +1,41 @@
+$transition-short:	0.1s;
+$transition-med:	0.2s;
+$transition-long:	0.4s;
+
+$transition-alg:	ease;
+
+div#connections ul li:hover{
+	transition: border $transition-short $transition-alg, background $transition-short $transition-alg, color $transition-short $transition-alg, font-weight $transition-short $transition-alg;
+}
+
+div#connections ul li:hover div.delete:hover{
+	transition: color $transition-short $transition-alg;
+}
+
+div.wall-add{
+	transition: color $transition-med $transition-alg, border-color $transition-med $transition-alg;
+}
+
+div.wall-icon:hover{
+	transition: background $transition-med $transition-alg;
+}
+
+div.wall-icon:hover div.buttons{
+	transition: visibility $transition-short $transition-alg;
+}
+
+div.wall-icon div.buttons div{
+	transition: color $transition-med $transition-alg;
+}
+
+div#functions{
+	transition: right $transition-long $transition-alg;
+}
+
+div#functions div#menu-slide{
+	transition: color $transition-long $transition-alg;
+}
+
+div#functions div.function-button{
+	transition: color $transition-med $transition-alg, text-shadow $transition-med $transition-alg;
+}

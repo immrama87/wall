@@ -1,6 +1,13 @@
 module.exports = function(app, db, sessions){
 	var path = "/api/walls/:wallId/notes/";
 	
+	/**
+	 *	method:	GET
+	 *	path:	/api/walls/{wallId}/notes/
+	 *	description:	Used to retrieve all notes associated to a given wall
+	 *	response:	DisplayText
+	 *	data:	wallId
+	 */
 	app.get(path, function(req, res){
 		db.get({
 			coll:		"notes",
@@ -12,6 +19,14 @@ module.exports = function(app, db, sessions){
 		});
 	});
 	
+	/**
+	 *	method:	GET
+	 *	path:	/api/walls/{wallId}/notes/new/
+	 *	description:	Used to retrieve all notes that were modified since the last time the current user logged in.
+	 *	warning:	Using this route could cause issues the next time you login to this wall, as you will not be notified of additions/changes since your last login.
+	 *	data:	wallId
+	 *	response:	DisplayText
+	 */
 	app.get(path + "new/", function(req, res){
 		var loginFieldName = "LastLogin_" + req.wallId;
 		db.get({
@@ -52,6 +67,12 @@ module.exports = function(app, db, sessions){
 		});
 	});
 	
+	/**
+	 *	method:	POST
+	 *	path:	/api/walls/{wallId}/notes/
+	 *	description:	Used to create a new note on a given wall
+	 *	data:	wallId, DisplayText
+	 */
 	app.post(path, function(req, res){
 		var obj = req.body;
 		obj.WallID = req.wallId;
@@ -75,6 +96,12 @@ module.exports = function(app, db, sessions){
 		next();
 	});
 	
+	/**
+	 *	method:	PUT
+	 *	path:	/api/walls/{wallId}/notes/{noteId}/
+	 *	description:	Used to update a given note on a given wall
+	 *	data:	wallId, noteId, DisplayText--optional
+	 */
 	app.put(path + ":noteId", function(req, res){
 		db.get({
 			coll:		"notes",
@@ -107,6 +134,13 @@ module.exports = function(app, db, sessions){
 		});
 	});
 	
+	/**
+	 *	method:	DELETE
+	 *	path:	/api/walls/{wallId}/notes/{noteId}/
+	 *	description:	Used to delete a given note on a given wall (and all associated user walls)
+	 *	data:	wallId, noteId
+	 *	route:	unsubmittable
+	 */
 	app.delete(path + ":noteId", function(req, res){
 		db.delete({
 			coll:		"notes",
@@ -119,6 +153,13 @@ module.exports = function(app, db, sessions){
 	
 	var userPath = "/api/walls/:wallId/user/notes/";
 	
+	/**
+	 *	method:	GET
+	 *	path:	/api/walls/{wallId}/user/notes/
+	 *	description:	Used to retrieve all of the notes for the user wall for the logged-in user associated to a given public wall.
+	 *	data:	wallId
+	 *	response:	X, Y, Z, Parent, ModifiedDate
+	 */	
 	app.get(userPath, function(req, res){
 		db.get({
 			coll:		"notes",
@@ -130,6 +171,13 @@ module.exports = function(app, db, sessions){
 		});
 	});
 	
+	/**
+	 *	method:	GET
+	 *	path:	/api/walls/{wallId}/user/notes/{noteId}/
+	 *	description:	Used to retrieve the location data for a given note on the user wall for the logged-in user associated to a given public wall.
+	 *	data:	wallId, noteId
+	 *	response:	X, Y, Z
+	 */
 	app.get(userPath + ":noteId", function(req, res){
 		db.get({
 			coll:		"notes",
@@ -141,6 +189,12 @@ module.exports = function(app, db, sessions){
 		});
 	});
 	
+	/**
+	 *	method:	POST
+	 *	path:	/api/walls/{wallId}/user/notes/{noteId}/
+	 *	description:	Used to associate and initially position a note that has been added to a public wall to the logged-in user's user wall. Use PUT /api/walls/{wallId}/user/notes/{noteId}/ to update a note that has already been associated.
+	 *	data:	wallId, noteId, X, Y
+	 */
 	app.post(userPath + ":noteId", function(req, res){
 		db.get({
 			coll:		"notes",
@@ -173,6 +227,12 @@ module.exports = function(app, db, sessions){
 		});
 	});
 	
+	/**
+	 *	method:	PUT
+	 *	path:	/api/walls/{wallId}/user/notes/{noteId}/
+	 *	description:	Used to update the position of a note associated to a user wall. Use POST /api/walls/{wallId}/user/notes/{noteId}/ to add a note to a user wall.
+	 *	data:	wallId, noteId, X--optional, Y--optional
+	 */
 	app.put(userPath + ":noteId", function(req, res){
 		db.get({
 			coll:		"notes",
