@@ -1,0 +1,2 @@
+02/11/2016 02:26:27 PM - [ERROR] Error connecting to MongoDB.
+Error Message: MongoError: connect ETIMEDOUT

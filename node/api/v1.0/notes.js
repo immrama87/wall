@@ -192,7 +192,7 @@ module.exports = function(app, db, sessions){
 	/**
 	 *	method:	POST
 	 *	path:	/api/walls/{wallId}/user/notes/{noteId}/
-	 *	description:	Used to associate and initially position a note that has been added to a public wall to the logged-in user's user wall. Use PUT /api/walls/{wallId}/user/notes/{noteId}/ to update a note that has already been associated.
+	 *	description:	Used to associate and initially position a note that has been added to a public wall to the logged-in user's user wall. Refer to PUT /api/walls/{wallId}/user/notes/{noteId}/ for details on updating a note that has already been associated.
 	 *	data:	wallId, noteId, X, Y
 	 */
 	app.post(userPath + ":noteId", function(req, res){
@@ -230,7 +230,7 @@ module.exports = function(app, db, sessions){
 	/**
 	 *	method:	PUT
 	 *	path:	/api/walls/{wallId}/user/notes/{noteId}/
-	 *	description:	Used to update the position of a note associated to a user wall. Use POST /api/walls/{wallId}/user/notes/{noteId}/ to add a note to a user wall.
+	 *	description:	Used to update the position of a note associated to a user wall. Refer to POST /api/walls/{wallId}/user/notes/{noteId}/ for details on adding a note to a user wall.
 	 *	data:	wallId, noteId, X--optional, Y--optional
 	 */
 	app.put(userPath + ":noteId", function(req, res){

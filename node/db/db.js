@@ -1,7 +1,7 @@
 var mongo = require("mongodb");
 var MongoClient = mongo.MongoClient;
 
-module.exports = function(){
+module.exports = (function(logger){
 	var d = {};
 	var url;
 	
@@ -32,6 +32,7 @@ module.exports = function(){
 		var response = {};
 		MongoClient.connect(url, function(err, db){
 			if(err){
+				logger.error("Error connecting to MongoDB.\nError Message: " + err);
 				response.status = "error";
 				response.data = "An error occurred connecting to MongoDB.\nError Message: " + err;
 				obj.callback(response);
@@ -251,4 +252,4 @@ module.exports = function(){
 	}
 	
 	return d;
-}
+});

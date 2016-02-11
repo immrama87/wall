@@ -1,4 +1,4 @@
-module.exports = function(db){
+module.exports = function(db, logger){
 	var s = {};
 	var sessions = {};
 	var permMap = {};
@@ -15,7 +15,7 @@ module.exports = function(db){
 					callback:	function(data){}
 				});
 				delete sessions[i];
-				console.log("User " + id + " logged out.");
+				logger.info("User " + id + " logged out.");
 			}
 		}
 		
@@ -30,7 +30,7 @@ module.exports = function(db){
 			fields:		["Permissions"],
 			callback:	function(data){
 				var perms = data.records[0].Permissions;
-				console.log("User " + id + " logged in with permissions " + perms);
+				logger.info("User " + id + " logged in. Granted permissions: " + perms.join(", "));
 				permMap[id] = perms;
 			}
 		});

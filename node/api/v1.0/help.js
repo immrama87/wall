@@ -86,12 +86,13 @@ module.exports = (function(app, express){
 						var param_fields = routeObj.data.split(",");
 						
 						for(var i=0;i<param_fields.length;i++){
-							var optional = "";
+							var optional = optional_text = "";
 							if(param_fields[i].indexOf("--optional") > -1){
 								param_fields[i] = param_fields[i].substring(0, param_fields[i].indexOf("--optional"));
 								optional = "class='optional'";
+								optional_text = " (Optional)";
 							}
-							routeObj["Parameters"] += "<div class='param-field'><div class='param-label'>" + param_fields[i].trim() + ":</div><div class='param-value'><input " + optional + "type='text' /></div></div>";
+							routeObj["Parameters"] += "<div class='param-field'><div class='param-label'>" + param_fields[i].trim() + ":</div><div class='param-value'><input " + optional + "type='text' />" + optional_text + "</div></div>";
 						}
 					}
 					
@@ -104,7 +105,19 @@ module.exports = (function(app, express){
 				
 				var linkHTML = "";
 				for(var i=0;i<links.length;i++){
-					linkHTML += "<a href='#" + i + "'>" + links[i] + "</a><br />";
+					linkHTML += "<div class='route-link'><a href='#" + i + "'>" + links[i] + "</a></div>";
+					
+					var index, offset = 0;
+					while((index = content.routes.indexOf(links[i], offset)) > -1){
+						var tagStart = content.routes.lastIndexOf("<", index);
+						var tagEnd = content.routes.indexOf(">", tagStart) + 1;
+						var tag = content.routes.substring(tagStart, tagEnd);
+						if(tag != "<h1>"){
+							content.routes = content.routes.substring(0, index) + "<a href='#" + i + "'>" + links[i] + "</a>" + content.routes.substring(index + links[i].length);
+						}
+						
+						offset = content.routes.indexOf("</a>", index);
+					}
 				}
 				
 				content.links = linkHTML;

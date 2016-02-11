@@ -1,0 +1,22 @@
+{
+	"admin":	{
+		"file":		"logs/admin.log",
+		"level":	"trace",
+		"pattern":	"%dt - [%l] %c: %m"
+	},
+	"access":	{
+		"file":		"logs/access.log",
+		"level":	"info",
+		"pattern":	"%dt - [%l] %m"
+	},
+	"error":	{
+		"file":		"logs/errors.log",
+		"level":	"error",
+		"pattern":	"%dt - [%l] %m"
+	},
+	"db":		{
+		"file":		"logs/db.log",
+		"level":	"error",
+		"pattern":	"%dt - [%l] %m"
+	}
+}

@@ -5,17 +5,13 @@ body, html{
 	font-family: 'PT Sans', sans-serif;
 	background:#EEEEEE;
 	height:100%;
-	overflow:hidden;
 }
 
 header{
 	background:#FF6666;
-	color:#EEEEEE;
-	position:fixed;
-	height:6%;
+	color:#FFFFFF;
 	text-align:center;
 	width:100%;
-	border-top:1em solid #EEEEEE;
 }
 
 section.login{
@@ -41,20 +37,21 @@ section.main ul.nav{
 	box-shadow:0.5em 0.5em 0.5em rgba(0,0,0,0.1);
 }
 
-nav.sidebar{
-	position:fixed;
-	top:8%;
-	height:90%;
-	text-align:left;
-	padding:1em;
-	border-top-right-radius:0.5em;
-	border-bottom-right-radius:0.5em;
-	overflow-y:auto;
+nav.route-links div.route-link{
+	width: 50%;
+    margin: 0 auto;
+    padding: 0.5em;
+    text-align: left;
+    background: white;
+    border-radius: 0.5em;
+    box-shadow: 0.5em 0.5em 0.5em rgba(0,0,0,0.1);
+    margin-bottom: 2em;
 }
 
-nav.sidebar a{
-	margin:0.5em 0;
-	display:inline-block;
+nav.route-links div.route-link a, div.top-link a, div.route a{
+	text-decoration:none;
+	font-weight:bold;
+	color:#3E86B2;
 }
 
 section.main ul.nav>li{
@@ -78,13 +75,6 @@ section.main ul.nav>li:hover>a{
 	font-weight:bold;
 }
 
-section.routes, section.main{
-	height:92%;
-	margin-top:4%;
-	overflow-y:auto;
-	padding-top:1em;
-}
-
 section.routes div.route{
 	width:50%;
 	margin:0 auto;
@@ -93,14 +83,14 @@ section.routes div.route{
 	background:white;
 	border-radius:0.5em;
 	box-shadow:0.5em 0.5em 0.5em rgba(0,0,0,0.1);
-	margin-bottom:2em;
+	margin-bottom:0.5em;
 }
 div.param-field{
 	margin-bottom:0.5em;
 }
 
 section.routes div.param-field{
-	width:50%;
+	width:70%;
 }
 
 section.login div.param-field{
@@ -108,18 +98,19 @@ section.login div.param-field{
 }
 
 div.param-field div.param-label{
-	width:33%;
+	width:25%;
 	display:inline-block;
 	text-align:left;
 }
 
 div.param-field div.param-value{
-	width:60%;
+	width:50%;
 	display:inline-block;
+	vertical-align:middle;
 }
 
 div.param-field div.param-value input{
-	width:100%;
+	width:70%;
 	padding:0.5em;
 	display:inline-block;
 	vertical-align:middle;
@@ -200,4 +191,11 @@ section.routes div.route div.output.error{
 
 p.no-submit, div.warning{
 	color:#FF6666;
+}
+
+div.top-link{
+	width:50%;
+	margin:0 auto;
+	text-align:left;
+	margin-bottom:1.5em;
 }

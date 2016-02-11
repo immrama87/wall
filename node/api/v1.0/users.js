@@ -1,8 +1,8 @@
 var crypto = require("crypto");
 
-module.exports = function(app, db, sessions){
+module.exports = function(app, db, sessions, logger){
 	var path = "/api/users/";
-	
+		
 	/**
 	 *	method:			GET
 	 *	path:			/api/users/
@@ -15,6 +15,9 @@ module.exports = function(app, db, sessions){
 			fields:		["FirstName", "LastName", "UserName"],
 			query:		{},
 			callback:	function(data){
+				if(data.status == "error"){
+					logger.error("Error occurred at endpoint /api/users/.\n\tError Message: " + data.data);
+				}
 				res.end(JSON.stringify(data));
 			}
 		});
@@ -77,7 +80,10 @@ module.exports = function(app, db, sessions){
 			fields:		["Password", "CreateDate", "LastLogin"],
 			query:		{UserName:	obj.UserName},
 			callback:	function(data){
-				if(data.metadata.size == 0){
+				if(data.status == "error"){
+					response = data;
+				}
+				else if(data.metadata.size == 0){
 					response.status = "error";
 					response.data = "No user with username " + obj.UserName + " could be found.";
 				}

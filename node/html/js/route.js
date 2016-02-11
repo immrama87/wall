@@ -10,6 +10,9 @@ $(function(){
 						if($(this).val() != "" && $(this).val() != undefined){
 							button.isEnabled();
 						}
+						if(evt.type == "keyup" && evt.keyCode == 13){
+							button.click();
+						}
 					});
 				}
 				else {
@@ -101,6 +104,7 @@ $(function(){
 		$.each($(output).find("li"), function(index, el){
 			if($(el).find("ul").length > 0){
 				$(el).attr("is-open", false);
+				$(el).css("cursor", "pointer");
 				$(el).on("click touch touchstart", function(evt){
 					if($(el).attr("is-open") === 'true'){
 						$(el).attr("is-open", false);
@@ -110,8 +114,11 @@ $(function(){
 						$(el).attr("is-open", true);
 						$(el).addClass("open");
 					}
-					evt.stopPropagation();
 				});
+				
+				$(el).find("ul").on("click touch touchstart", function(evt){
+					evt.stopPropagation();
+				}).css("cursor", "text");
 			}
 		});
 	}
@@ -135,7 +142,8 @@ $(function(){
 		for(var i in obj){
 			if(Object.prototype.toString.call(obj[i]) === '[object Object]' ||
 				Object.prototype.toString.call(obj[i]) === '[object Array]'){
-				result += "<li class='object-li'>" + i + ": <span class='value'>Object</span>" + formatObject(obj[i]) + "</li>";
+				var type = (Object.prototype.toString.call(obj[i]) === '[object Object]' ? "Object" : "Array");
+				result += "<li class='object-li'>" + i + ": <span class='value'>" + type + "</span>" + formatObject(obj[i]) + "</li>";
 			}
 			else {
 				var value = obj[i];

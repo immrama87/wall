@@ -5,22 +5,28 @@ var bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-var db = require("./db/db")();
+var logFactory = require("./logger/logger")();
+
+var db = require("./db/db")(logFactory.getInstance("Database", "db"));
 db.config({
 	server:	"localhost",
 	port:	27017,
 	db:		"wall"
 });
 
-var sessions = require("./sessions/sessionManager")(db);
+var sessions = require("./sessions/sessionManager")(db, logFactory.getInstance("SessionManager", "access"));
+
+app.use("/help", express.static("./html"));
+app.use("/setup", express.static("./html"));
 
 app.options("/api/help", function(req, res){
 	res.status(403).send(JSON.stringify({status: "unverified"}));
 });
 
-app.use("/help", express.static("./html"));
+var accessLog = logFactory.getInstance("server", "access");
 
-app.options("/*", function(req, res){
+app.options("/api/*", function(req, res){
+	accessLog.trace("Cross-Origin Resource Sharing request received from " + req.headers.origin);
 	res.status(200);
 	res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
 	res.setHeader('Access-Control-Allow-Headers','Access-Control-Allow-Origin, Access-Control-Allow-Headers');
@@ -28,7 +34,6 @@ app.options("/*", function(req, res){
 	res.setHeader('Access-Control-Allow-Credentials','true');
 	res.end();
 });
-
 
 app.all("*", function(req, res, next){
 	res.setHeader("Access-Control-Allow-Origin", req.headers.origin);
@@ -40,14 +45,14 @@ app.all("*", function(req, res, next){
 		var id;
 		var cookie = req.headers.cookie;
 		var response = {};
+		var proceed = true;
 		if(cookie == undefined){
 			if(req.url.indexOf("/api/help") == -1){
 				response.status = "unverified";
-				res.send(JSON.stringify(response));
+				proceed = false;
 			}
 			else {
 				req.status = "unverified";
-				next();
 			}
 		}
 		else {
@@ -57,21 +62,28 @@ app.all("*", function(req, res, next){
 		if(id == undefined){
 			if(req.url.indexOf("/api/help") == -1){
 				response.status = "unverified";
-				res.send(JSON.stringify(response));
+				proceed = false;
 			}
 			else {
 				req.status = "unverified";
-				next();
 			}
 		} 
 		else {
 			req.userID = id;
+		}
+		
+		accessLog.trace("Request received for " + req.method + " " + req.url + " from origin " + req.headers.host + " initiated by " + (req.userID || "unknown user") + ".");
+		
+		if(proceed){
 			next();
+		}
+		else {
+			res.send(JSON.stringify(response));
 		}
 	}
 });
 
-var users = require("./api/v1.0/users")(app, db, sessions);
+var users = require("./api/v1.0/users")(app, db, sessions, logFactory.getInstance("/api/users/", "admin"));
 var walls = require("./api/v1.0/walls")(app, db, sessions);
 var notes = require("./api/v1.0/notes")(app, db, sessions);
 var categories = require("./api/v1.0/categories")(app, db, sessions);
