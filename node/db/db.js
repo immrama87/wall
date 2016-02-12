@@ -18,6 +18,239 @@ module.exports = (function(logger){
 		url = "mongodb://" + obj.server + ":" + obj.port + "/" + obj.db;
 	}
 	
+	d.details = {
+		description:	"Default Wall.io Database Driver for MongoDB.",
+		properties:	[
+			{
+				name:	"Server",
+				key:	"server"
+			},
+			{
+				name:	"Port",
+				key:	"port",
+				validate:	"integer"
+			},
+			{
+				name:	"Database",
+				key:	"db"
+			},
+			{
+				name:	"Username",
+				key:	"user",
+				optional:	true
+			},
+			{
+				name:	"Password",
+				key:	"pass",
+				optional:	true,
+				type:	"password"
+			}
+		]
+	};
+	
+	/**
+	 *	db.test
+	 *	Tests a provided configuration and returns a boolean status
+	 *	@param obj:		An object containing the following fields:
+	 *						* server:	The server hostname to connect to 
+	 *						* port:		The TCP port on the server that MongoDB is listening on
+	 *						* db:		The database to connect to
+	 *						* user:		The username to authenticate with (optional)
+	 *						* pass:		The password to authenticate with (optional)
+	 *	@param res:		The response object to communicate test status over
+	 */
+	d.test = function(obj, res){
+		var testURL = "mongodb://" + obj.server + ":" + obj.port + "/" + obj.db;
+		MongoClient.connect(testURL, function(err, db){
+			if(err){
+				var message = "Could not connect to MongoDB at " + testURL + " during test. " + err
+				logger.error(message);
+				res.send(JSON.stringify({
+					status:		"error",
+					data:		message,
+					highlight:	["server", "port", "db"]
+				}));
+			}
+			else {
+				if(obj.user != "" && obj.pass != ""){
+					db.authenticate(obj.user, obj.pass, function(err, result){
+						if(err){
+							var message = "Could not authenticate to MongoDB with user " + obj.user + ". Check that the user exists and the password provided was correct. " + err;
+							logger.error(message);
+							res.send(JSON.stringify({
+								status:		"error",
+								data:		message,
+								highlight:	["user", "pass"]
+							}));
+						}
+						else {
+							res.send(JSON.stringify({
+								status:	"success"
+							}));
+						}
+					});
+				}
+				else {
+					res.send(JSON.stringify({
+						status:	"success"
+					}));
+				}
+			}
+		});
+	}
+	
+	/**
+	 *	db.generateConfigObject
+	 *	Creates an object containing the configuration properties that are required for the driver to connect
+	 *	@param obj:		An object containing the following fields:
+	 *						* server:	The server hostname to connect to 
+	 *						* port:		The TCP port on the server that MongoDB is listening on
+	 *						* db:		The database to connect to
+	 *						* user:		The username to authenticate with (optional)
+	 *						* pass:		The password to authenticate with (optional)
+	 *
+	 *	@return {Object}
+	 */
+	d.generateConfigObject = function(obj){
+		var result = {};
+		result.server = obj.server;
+		result.port = obj.port;
+		result.db = obj.db;
+		
+		if(obj.user && obj.user != ""){
+			result.user = obj.user;
+		}
+		if(obj.pass && obj.pass != ""){
+			result.pass = obj.pass;
+		}
+		
+		return result;
+	}
+	
+	d.validate = function(obj, res, colls){
+		var testUrl = "mongodb://" + obj.server + ":" + obj.port + "/" + obj.db;
+		var response = {};
+		MongoClient.connect(testUrl, function(err, db){
+			if(err){
+				var message = "Error connecting to MongoDB. " + err;
+				logger.error(message);
+				response.status = "error";
+				response.data = message;
+				res.send(JSON.stringify(response));
+				throw err;
+			}
+			
+			db.collections(function(collErr, collList){
+				if(collErr){
+					var message = "Error retrieving collection list from MongoDB. " + err;
+					logger.error(message);
+					response.status = "error";
+					response.data = message;
+					res.send(JSON.stringify(response));
+					throw err;
+				}
+				
+				for(var i=0;i<collList.length;i++){
+					if(colls.indexOf(collList[i].collectionName) > -1){
+						colls.splice(colls.indexOf(collList[i].collectionName), 1);
+					}
+				}
+				
+				if(colls.length > 0){
+					response.status = "invalid";
+					response.data = "The following required collections do not exist in the database " + obj.db + ":";
+					response.missing = colls;
+				}
+				else {
+					response.status = "success";
+				}
+				
+				res.send(JSON.stringify(response));
+			});
+		});
+	}
+	
+	d.initialize = function(obj, colls, res){
+		var response = {};
+		var testUrl = "mongodb://" + obj.server + ":" + obj.port + "/" + obj.db;
+		MongoClient.connect(testUrl, function(err, db){
+			if(err){
+				var message = "Error connecting to MongoDB. " + err;
+				logger.error(message);
+				response.status = "error";
+				response.data = message;
+				res.send(JSON.stringify(response));
+				throw err;
+			}
+			
+			var responses = [];
+			for(var i=0;i<colls.length;i++){
+				responses.push(createCollectionResponse(colls[i], db)
+					.onerror(function(response, err){
+						logger.error("Error initializing collection " + response.collectionName + ". " + err);
+					})
+					.oncomplete(function(){
+						var complete = true;
+						for(var i=0;i<responses.length;i++){
+							complete = responses[i].completed;
+							
+							if(!complete)
+								break;
+						}
+						
+						if(complete){
+							var errors = [];
+							for(var i=0;i<responses.length;i++){
+								if(responses[i].status == "error"){
+									errors.push(responses[i].collectionName);
+								}
+							}
+							
+							if(errors.length > 0){
+								response.status = "error";
+								response.data = "Errors were encountered initializing the following collections:\n\t * " + errors.join("n\t * ") + "\nPlease consult the application logs.";
+							}
+							else {
+								response.status = "success";
+							}
+							
+							res.send(JSON.stringify(response));
+						}
+					})
+				);
+			}
+		});
+	}
+	
+	d.startup = function(colls, callback){
+		MongoClient.connect(url, function(err, db){
+			if(err){
+				callback(err);
+			}
+			else {
+				db.collections(function(collErr, collList){
+					if(collErr){
+						callback(collErr);
+					}
+					else {
+						for(var i=0;i<collList.length;i++){
+							if(colls.indexOf(collList[i].collectionName) > -1){
+								colls.splice(colls.indexOf(collList[i].collectionName), 1);
+							}
+						}
+						
+						if(colls.length > 0){
+							callback("Required collections " + colls.join(", ") + " were not found. Please use <server>:<port>/setup/db to ensure proper configuration of the database.");
+						}
+						else {
+							callback();
+						}
+					}
+				});
+			}
+		});
+	}
+	
 	/**
 	 *	db.get
 	 *	Retrieves data from a specified collection, using a specified query.
@@ -249,6 +482,87 @@ module.exports = (function(logger){
 				sanitizeQuery(query["$or"][i]);
 			}
 		}
+	}
+	
+	function createCollectionResponse(name, db){
+		var ccr = {};
+		
+		ccr.completed = false;
+		ccr.status = "initiated";
+		ccr.collectionName = name;
+		
+		var comps = [];
+		var err = undefined;
+		
+		ccr.oncomplete = function(comp){
+			if(typeof comp == "function"){
+				comps.push(comp);
+			}
+			return ccr;
+		}
+		
+		ccr.onerror = function(error){
+			if(typeof error == "function"){
+				err = error;
+			}
+			return ccr;
+		}
+		
+		db.createCollection(name, function(createErr, collection){
+			if(createErr){
+				err(ccr, createErr);
+				ccr.status = "error";
+				complete();
+			}
+			else {
+				collection.insert({"test":	"value"}, function(insertErr, insertResult){
+					if(insertErr){
+						err(ccr, insertErr);
+						ccr.status = "error";
+						complete();
+					}
+					else {
+						collection.update({"test": "value"}, {"test": "updated"}, function(updateErr, updateResult){
+							if(updateErr){
+								err(ccr, updateErr);
+								ccr.status = "error";
+								complete();
+							}
+							else {
+								collection.find({"test": "updated"}, function(findErr, findResult){
+									if(findErr){
+										err(ccr, findErr);
+										ccr.status = "error";
+										complete();
+									}
+									else {
+										var deleteResult = collection.remove({"test": "updated"});
+				
+										if(deleteResult.writeConcernError != undefined){
+											err(ccr, deleteResult.writeConcernError.errmsg);
+											ccr.status = "error";
+										}
+										else {
+											ccr.status = "success";
+										}
+										complete();
+									}
+								});
+							}
+						});
+					}
+				});
+			}
+		});
+		
+		function complete(){
+			ccr.completed = true;
+			for(var i=0;i<comps.length;i++){
+				comps[i]();
+			}
+		}
+		
+		return ccr;
 	}
 	
 	return d;

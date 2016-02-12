@@ -1,0 +1,97 @@
+body, html{
+	padding:0;
+	margin:0;
+	text-align:center;
+	font-family: 'PT Sans', sans-serif;
+	background:#EEEEEE;
+	height:100%;
+}
+
+header{
+	background:#FF6666;
+	color:#FFFFFF;
+	text-align:center;
+	width:100%;
+}
+
+section.setup{
+	background:white;
+	margin:0 auto;
+	padding:1em;
+	text-align:left;
+	border-radius:0.5em;
+	box-shadow:0.5em 0.5em 0.5em rgba(0,0,0,0.1);
+}
+
+section.setup table.selector{
+	width:100%;
+	table-layout:fixed;
+}
+
+section.setup table.selector tbody>tr{
+	cursor:pointer;
+}
+
+section.setup table.selector tbody>tr>td{
+	padding:0.5em 0;
+}
+
+section.setup table.selector tr.error{
+	color:#FF6666;
+}
+
+section.setup table.selector td i{
+	color:#6FCC3D;
+	visibility:hidden;
+}
+
+section.setup table.selector tr.selected>td i{
+	visibility:visible;
+}
+
+div.prop-field{
+	margin-bottom:0.5em;
+}
+
+div.prop-field div.prop-label{
+	width:25%;
+	display:inline-block;
+	text-align:left;
+}
+
+div.prop-field div.prop-value{
+	width:50%;
+	display:inline-block;
+	vertical-align:middle;
+}
+
+div.prop-field div.prop-value input{
+	width:70%;
+	padding:0.5em;
+	display:inline-block;
+	vertical-align:middle;
+	border-radius:0.5em;
+	border:none;
+	box-shadow:inset 0.25em 0.25em 0.25em rgba(0,0,0,0.25);
+	outline:none;
+}
+
+div.prop-field div.prop-value input.error-highlight{
+	border:1px solid #FF6666;
+}
+
+button{
+	cursor:not-allowed;
+	background:#FF6666;
+	color:white;
+	border:none;
+	padding:1em;
+	border-radius:0.5em;
+	font-weight:bold;
+	outline:none;
+}
+
+button.enabled{
+	background:#6FCC3D;
+	cursor:pointer;
+}

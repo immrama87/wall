@@ -14,6 +14,15 @@ header{
 	width:100%;
 }
 
+section.setup{
+	background:white;
+	margin:0 auto;
+	padding:1em;
+	text-align:left;
+	border-radius:0.5em;
+	box-shadow:0.5em 0.5em 0.5em rgba(0,0,0,0.1);
+}
+
 section.login{
 	width:50%;
 	background:white;
