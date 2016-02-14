@@ -175,7 +175,8 @@ module.exports = function(app, db, sessions, logger){
 	 *	method:	PUT
 	 *	path:	/api/users/{UserName}/
 	 *	description: Used to update a given user.
-	 *	data:	UserName, FirstName--optional, LastName--optional
+	 *	data:	UserName, FirstName--optional, LastName--optional, Email--optional
+	 *	route:	unsubmittable
 	 */
 	app.put(path + ":id", function(req, res){
 		var obj = req.body;

@@ -1,0 +1,1 @@
+02/14/2016 09:14:49 AM - [ERROR] Error starting database. Required collections categories, comments, notes, users, walls were not found. Please use <server>:<port>/setup/db to ensure proper configuration of the database.
