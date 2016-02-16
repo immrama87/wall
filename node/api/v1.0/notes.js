@@ -14,7 +14,7 @@ module.exports = function(app, db, sessions){
 			query:		{WallID:	req.wallId},
 			fields:		["DisplayText"],
 			callback:	function(response){
-				res.send(JSON.stringify(response));
+				res.end(JSON.stringify(response));
 			}
 		});
 	});
@@ -35,7 +35,7 @@ module.exports = function(app, db, sessions){
 			fields:		[loginFieldName],
 			callback:	function(user){
 				if(user.metadata.size != 1){
-					res.send(JSON.stringify({"status":	"error"}));
+					res.end(JSON.stringify({"status":	"error"}));
 				}
 				else {
 					var lastLogin;
@@ -50,7 +50,7 @@ module.exports = function(app, db, sessions){
 						query:		{ModifiedDate: {$gte: lastLogin}, WallID: req.wallId},
 						fields:		["DisplayText"],
 						callback:	function(response){
-							res.send(JSON.stringify(response));
+							res.end(JSON.stringify(response));
 							
 							updateData = {};
 							updateData[loginFieldName] = new Date().getTime();
@@ -86,7 +86,7 @@ module.exports = function(app, db, sessions){
 			coll:		"notes",
 			data:		obj,
 			callback:	function(response){
-				res.send(JSON.stringify(response));
+				res.end(JSON.stringify(response));
 			}
 		});
 	});
@@ -114,7 +114,7 @@ module.exports = function(app, db, sessions){
 						"data":		"There was an error updating the note selected. It may not exist anymore."
 					};
 					
-					res.send(JSON.stringify(response));
+					res.end(JSON.stringify(response));
 				}
 				else {
 					var obj = req.body;
@@ -126,7 +126,7 @@ module.exports = function(app, db, sessions){
 						query:		{WallID: req.wallId, _id: req.noteId},
 						data:		obj,
 						callback:	function(response){
-							res.send(JSON.stringify(response));
+							res.end(JSON.stringify(response));
 						}
 					});
 				}
@@ -146,7 +146,7 @@ module.exports = function(app, db, sessions){
 			coll:		"notes",
 			query:		{$or: [{WallID: req.wallId, _id: req.noteId}, {WallID: new RegExp(req.wallId, "i"), parent: req.noteId}]},
 			callback:	function(response){
-				res.send(JSON.stringify(response));
+				res.end(JSON.stringify(response));
 			}
 		});
 	});
@@ -166,7 +166,7 @@ module.exports = function(app, db, sessions){
 			query:		{WallID:	req.wallId + "_" + req.userID},
 			fields:		["X", "Y", "Z", "Parent", "ModifiedDate"],
 			callback:	function(response){
-				res.send(JSON.stringify(response));
+				res.end(JSON.stringify(response));
 			}
 		});
 	});
@@ -184,7 +184,7 @@ module.exports = function(app, db, sessions){
 			query:		{WallID:	req.wallId + "_" + req.userID, Parent: req.noteId},
 			fields:		["X", "Y", "Z"],
 			callback:	function(response){
-				res.send(JSON.stringify(response));
+				res.end(JSON.stringify(response));
 			}
 		});
 	});
@@ -207,7 +207,7 @@ module.exports = function(app, db, sessions){
 						data:		"This note has already been added to this user's wall."
 					};
 					
-					res.send(JSON.stringify(response));
+					res.end(JSON.stringify(response));
 				}
 				else {
 					var obj = req.body;
@@ -219,7 +219,7 @@ module.exports = function(app, db, sessions){
 						coll:		"notes",
 						data:		obj,
 						callback:	function(response){
-							res.send(JSON.stringify(response));
+							res.end(JSON.stringify(response));
 						}
 					});
 				}
@@ -245,7 +245,7 @@ module.exports = function(app, db, sessions){
 						data:		"There was an error updating the current note. It may not exist anymore."
 					};
 					
-					res.send(JSON.stringify(response));
+					res.end(JSON.stringify(response));
 				}
 				else {
 					var obj = req.body;
@@ -254,7 +254,7 @@ module.exports = function(app, db, sessions){
 						query:		{WallID: req.wallId + "_" + req.userID, Parent: req.noteId},
 						data:		obj,
 						callback:	function(response){
-							res.send(JSON.stringify(response));
+							res.end(JSON.stringify(response));
 						}
 					});
 				}

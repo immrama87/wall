@@ -43,7 +43,7 @@ module.exports = function(app, db, sessions, logger){
 						data:		"A user with the username " + obj.UserName + " already exists."
 					};
 					
-					res.send(JSON.stringify(response));
+					res.end(JSON.stringify(response));
 				}
 				else {
 					obj.LastLogin = new Date().getTime();
@@ -57,7 +57,7 @@ module.exports = function(app, db, sessions, logger){
 						coll:		"users",
 						data: 		obj,
 						callback:	function(response){
-							res.send(JSON.stringify(response));
+							res.end(JSON.stringify(response));
 						}
 					});
 				}
@@ -96,7 +96,7 @@ module.exports = function(app, db, sessions, logger){
 					var pass = encrypt(obj.Password, record.CreateDate);
 					if(pass == record.Password){
 						response.status = "success";
-						res.set("Set-Cookie", "NSESSIONID=" + sessions.addSession(obj.UserName) + ";Path=/api/;HttpOnly");
+						res.set("Set-Cookie", "NSESSIONID=" + sessions.addSession(obj.UserName) + ";Path=/;HttpOnly");
 						var time = new Date().getTime();
 						db.update({
 							coll:	"users",
@@ -135,7 +135,7 @@ module.exports = function(app, db, sessions, logger){
 			fields:		["FirstName", "LastName", "UserName", "CreateDate", "ModifiedDate", "LastLogin"],
 			query:		{UserName:	req.id},
 			callback:	function(data){
-				res.send(JSON.stringify(data));
+				res.end(JSON.stringify(data));
 			}
 		});
 	});
@@ -145,7 +145,7 @@ module.exports = function(app, db, sessions, logger){
 			next();
 		}
 		else {
-			res.send(JSON.stringify({status: "unauthorized"}));
+			res.end(JSON.stringify({status: "unauthorized"}));
 		}
 	});
 	
@@ -166,7 +166,7 @@ module.exports = function(app, db, sessions, logger){
 				if(data.status != "error"){
 					sessions.addPermission(req.id, obj.Permission);
 				}
-				res.send(JSON.stringify(data));
+				res.end(JSON.stringify(data));
 			}
 		});
 	});
@@ -190,12 +190,12 @@ module.exports = function(app, db, sessions, logger){
 				if(data.metadata.size == 0){
 					response.status = "error";
 					response.data = "No user with username " + req.id + " could be found.";
-					res.send(JSON.stringify(response));
+					res.end(JSON.stringify(response));
 				}
 				else if(data.metadata.size > 1){
 					response.status = "error";
 					response.data = "An error occurred. Please contact an administrator.";
-					res.send(JSON.stringify(response));
+					res.end(JSON.stringify(response));
 				}
 				else {
 					db.update({
@@ -203,7 +203,7 @@ module.exports = function(app, db, sessions, logger){
 						query:		{_id:	data.records[0]._id},
 						data:		obj,
 						callback:	function(response){
-							res.send(JSON.stringify(response));
+							res.end(JSON.stringify(response));
 						}
 					});
 				}
@@ -230,12 +230,12 @@ module.exports = function(app, db, sessions, logger){
 				if(data.metadata.size == 0){
 					response.status = "error";
 					response.data = "No user with username " + req.id + " could be found.";
-					res.send(JSON.stringify(response));
+					res.end(JSON.stringify(response));
 				}
 				else if(data.metadata.size > 1){
 					response.status = "error";
 					response.data = "An error occurred. Please contact an administrator.";
-					res.send(JSON.stringify(response));
+					res.end(JSON.stringify(response));
 				}
 				else {
 					var password = encrypt(obj.OldPassword, data.records[0].CreateDate);
@@ -246,14 +246,14 @@ module.exports = function(app, db, sessions, logger){
 							query:		{_id:	data.records[0]._id},
 							data:		update,
 							callback:	function(response){
-								res.send(JSON.stringify(response));
+								res.end(JSON.stringify(response));
 							}
 						});
 					}
 					else {
 						response.status = "error";
 						response.data = "The password provided does not match the password for user " + req.id;
-						res.send(JSON.stringify(response));
+						res.end(JSON.stringify(response));
 					}
 				}
 			}
@@ -272,7 +272,7 @@ module.exports = function(app, db, sessions, logger){
 			coll:		"users",
 			query:		{UserName:	req.id},
 			callback:	function(response){
-				res.send(JSON.stringify(response));
+				res.end(JSON.stringify(response));
 			}
 		});
 	});

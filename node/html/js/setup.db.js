@@ -174,7 +174,7 @@ $(function(){
 			dataType:	"json",
 			success:	function(response, status, xhr){
 				if(response.status == "success"){
-				
+					enableProceed();
 				}
 				else if(response.status == "invalid"){
 					var message = response.data || "Missing Tables:";
@@ -207,12 +207,18 @@ $(function(){
 					alert(response.data);
 				}
 				else {
-					
+					enableProceed();
 				}
 			},
 			error:		function(xhr, status, error){
 				alert(error);
 			}
 		});
+	}
+	
+	function enableProceed(){
+		$(button).attr("disabled", true);
+		$(button).removeClass("enabled");
+		$("#proceed").removeAttr("disabled");
 	}
 });

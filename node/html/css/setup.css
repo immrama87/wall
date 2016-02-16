@@ -95,3 +95,17 @@ button.enabled{
 	background:#6FCC3D;
 	cursor:pointer;
 }
+
+a#proceed[disabled]{
+	display:none;
+}
+
+a#proceed{
+	color:#6FCC3D;
+	float:right;
+}
+
+a#proceed i{
+	font-size:3em;
+	vertical-align:middle;
+}

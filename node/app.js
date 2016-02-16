@@ -6,16 +6,25 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 var logFactory = require("./logger/logger")();
+var serviceLog = logFactory.getInstance("Server", "admin");
 var fs = require("fs");
 
 app.REQUIRED_TABLES = ["categories", "comments", "notes", "users", "walls"];
-app.service = {
-	status:	"starting"
-};
 
+app.service = {};
+app.service.sockets = {};
+app.service.nextId = 0;
+app.service.status = "starting";
+
+app.all("*", function(req, res, next){
+	res.set("Connection", "close");
+	next();
+});
+
+app.use("/static", express.static("./html"));
 var setup = require("./setup/setup")(app, logFactory.getInstance("Setup", "admin"));
 
-app.initializeRoutes = function(){
+function initializeRoutes(){
 	fs.readFile("./db/db.config.json", "utf8", function(err, file){
 		if(!err) {
 			var dbConfig = JSON.parse(file);
@@ -23,16 +32,14 @@ app.initializeRoutes = function(){
 			db.config(dbConfig);
 			db.startup(app.REQUIRED_TABLES, function(startupErr){
 				if(startupErr){
-					app.service.status = "stopped";
 					logFactory.getInstance("Startup", "error").error("Error starting database. " + startupErr);
 				}
 				else {
 					var sessions = require("./sessions/sessionManager")(db, logFactory.getInstance("SessionManager", "access"));
 
-					app.use("/static", express.static("./html"))
-
-					app.options("/api/help", send403);
-					app.options("/setup", send403);
+					app.options("/api/help/*", send403);
+					app.options("/setup/*", send403);
+					app.options("/app/*", send403);
 
 					var accessLog = logFactory.getInstance("server", "access");
 
@@ -59,7 +66,7 @@ app.initializeRoutes = function(){
 							var response = {};
 							var proceed = true;
 							if(cookie == undefined){
-								if(req.url.indexOf("/api/help") == -1){
+								if(req.url.indexOf("/api/help") == -1 && req.url.indexOf("/app") == -1){
 									response.status = "unverified";
 									proceed = false;
 								}
@@ -72,7 +79,8 @@ app.initializeRoutes = function(){
 							}
 						
 							if(id == undefined){
-								if(req.url.indexOf("/api/help") == -1){
+								res.setHeader("Set-Cookie", "NSESSIONID=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT");
+								if(req.url.indexOf("/api/help") == -1 && req.url.indexOf("/app") == -1){
 									response.status = "unverified";
 									proceed = false;
 								}
@@ -90,35 +98,76 @@ app.initializeRoutes = function(){
 								next();
 							}
 							else {
-								res.send(JSON.stringify(response));
+								res.end(JSON.stringify(response));
 							}
 						}
 					});
-
+					
+					var config = require("./app/main")(app, db, sessions, logFactory.getInstance("app", "admin"));
 					var users = require("./api/v1.0/users")(app, db, sessions, logFactory.getInstance("/api/users/", "admin"));
 					var walls = require("./api/v1.0/walls")(app, db, sessions);
 					var notes = require("./api/v1.0/notes")(app, db, sessions);
 					var categories = require("./api/v1.0/categories")(app, db, sessions);
 					var help = require("./api/v1.0/help")(app, express);
 					
-					app.service.status = "started";
+					app.post("/app/restartService", function(req, res){
+						if(app.service.status != "stopped"){
+							restartServer(res);
+						}
+					});
+
+					app.get("/app/status", function(req, res){
+						res.end(JSON.stringify({status: app.service.status}));
+					});
 				}
 			});
-		}
-		else {
-			app.service.status = "stopped";
 		}
 	});
 }
 
-var server = app.listen(3000, function(){
-	app.initializeRoutes();
-	var host = server.address().address;
-	var port = server.address().port;
+var server;
+
+function startServer(){
+	app.service.status = "starting";
+	app.service.sockets = {};
+	app.service.nextId = 0;
+	server = app.listen(3000, function(){
+		initializeRoutes();
+		var host = server.address().address;
+		var port = server.address().port;
+		
+		serviceLog.info("Server at http://%s:%d started.", host, port);
+		app.service.status = "started";
+	});
 	
-	console.log("Listening at http://%s:%s", host, port);
-});
+	server.on("connection", function(socket){
+		var socketId = app.service.nextId++;
+		app.service.sockets[socketId] = socket;
+		
+		socket.on("close", function(){
+			delete app.service.sockets[socketId];
+		});
+	});
+}
+
+function restartServer(){
+	server.close(function(){
+		serviceLog.info("Closed remaining connections and stopped server.");
+	});
+
+	for(var socketId in app.service.sockets){
+		app.service.sockets[socketId].destroy();
+	}
+	
+	startServer();
+}
+
+startServer();
+
+app.reinitialize = function(){
+	restartServer();
+}
 
 function send403(req, res){
-	res.status(403).send(JSON.stringify({status: "unverified"}));
+	res.status(403).end(JSON.stringify({status: "unverified"}));
 }

@@ -50,7 +50,7 @@ module.exports = function(db, logger){
 			
 			sessId = cookie.substring(start, end);
 		}
-	
+		
 		session = sessions[sessId];
 		var id;
 		
@@ -81,23 +81,26 @@ module.exports = function(db, logger){
 	}
 	
 	s.verifyPermission = function(id, perm){
-		return permMap[id].indexOf(perm) > -1;
+		if(permMap.hasOwnProperty(id)){
+			return permMap[id].indexOf(perm) > -1;
+		}
+		else {
+			return false;
+		}
 	}
 	
 	function guid(){
-		var temp = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx";
-		
-		while(temp.indexOf("x") > -1){
-			temp = temp.substring(0, temp.indexOf("x")) + (Math.floor(Math.random() * 16)).toString(16) + temp.substring(temp.indexOf("x")+1);
+		var template = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx";
+		var index = 0;
+		while((index = template.indexOf("x")) > -1){
+			template = template.substring(0, index) + (Math.floor(Math.random() * 16)).toString(16) + template.substring(index+1);
 		}
 		
 		var y = ["8", "9", "a", "b"];
 		
-		while(temp.indexOf("y") > -1){
-			temp = temp.substring(0, temp.indexOf("y")) + y[Math.floor(Math.random() * 4)] + temp.substring(temp.indexOf("y")+1);
-		}
+		template.replace("y", y[Math.floor(Math.random() * 4)]);
 		
-		return temp;
+		return template;
 	}
 	
 	return s;

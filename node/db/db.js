@@ -1,25 +1,37 @@
 var mongo = require("mongodb");
 var MongoClient = mongo.MongoClient;
 
+/**
+ *	@module
+ *	wall.MongoDbDriver
+ *	The default Wall.io driver for MongoDB databases, including methods for setup, verification and all CRUD functions
+ *	
+ */
 module.exports = (function(logger){
 	var d = {};
 	var url;
 	
 	/**
-	 *	db.config
+	 *	config
 	 *	Configures the connection URL for the db client
 	 *
 	 *	@param obj:		An object containing the following fields:
 	 *						* server:	The server name for the connection
 	 *						* port:		The TCP port that Mongo is listening
 	 *						* db:		The database to connect to
+	 *
+	 *	@return {void}
 	 */
 	d.config = function(obj){
 		url = "mongodb://" + obj.server + ":" + obj.port + "/" + obj.db;
 	}
 	
+	/**
+	 *	details
+	 *	Describes the database driver and lists the properties required for setup.
+	 */
 	d.details = {
-		description:	"Default Wall.io Database Driver for MongoDB.",
+		description:	"The default Wall.io driver for MongoDB databases, including methods for setup, verification and all CRUD functions",
 		properties:	[
 			{
 				name:	"Server",
@@ -49,7 +61,7 @@ module.exports = (function(logger){
 	};
 	
 	/**
-	 *	db.test
+	 *	test
 	 *	Tests a provided configuration and returns a boolean status
 	 *	@param obj:		An object containing the following fields:
 	 *						* server:	The server hostname to connect to 
@@ -58,6 +70,8 @@ module.exports = (function(logger){
 	 *						* user:		The username to authenticate with (optional)
 	 *						* pass:		The password to authenticate with (optional)
 	 *	@param res:		The response object to communicate test status over
+	 *
+	 *	@return {void}
 	 */
 	d.test = function(obj, res){
 		var testURL = "mongodb://" + obj.server + ":" + obj.port + "/" + obj.db;
@@ -65,7 +79,7 @@ module.exports = (function(logger){
 			if(err){
 				var message = "Could not connect to MongoDB at " + testURL + " during test. " + err
 				logger.error(message);
-				res.send(JSON.stringify({
+				res.end(JSON.stringify({
 					status:		"error",
 					data:		message,
 					highlight:	["server", "port", "db"]
@@ -77,21 +91,21 @@ module.exports = (function(logger){
 						if(err){
 							var message = "Could not authenticate to MongoDB with user " + obj.user + ". Check that the user exists and the password provided was correct. " + err;
 							logger.error(message);
-							res.send(JSON.stringify({
+							res.end(JSON.stringify({
 								status:		"error",
 								data:		message,
 								highlight:	["user", "pass"]
 							}));
 						}
 						else {
-							res.send(JSON.stringify({
+							res.end(JSON.stringify({
 								status:	"success"
 							}));
 						}
 					});
 				}
 				else {
-					res.send(JSON.stringify({
+					res.end(JSON.stringify({
 						status:	"success"
 					}));
 				}
@@ -100,7 +114,7 @@ module.exports = (function(logger){
 	}
 	
 	/**
-	 *	db.generateConfigObject
+	 *	generateConfigObject
 	 *	Creates an object containing the configuration properties that are required for the driver to connect
 	 *	@param obj:		An object containing the following fields:
 	 *						* server:	The server hostname to connect to 
@@ -127,7 +141,21 @@ module.exports = (function(logger){
 		return result;
 	}
 	
-	d.validate = function(obj, res, colls){
+	/**
+	 *	validate
+	 *	Validates that all required collections are available in the startup database.
+	 *	@param	obj:		An object containing the following fields:
+	 *							* server:	The server hostname to connect to 
+	 *							* port:		The TCP port on the server that MongoDB is listening on
+	 *							* db:		The database to connect to
+	 *							* user:		The username to authenticate with (optional)
+	 *							* pass:		The password to authenticate with (optional)
+	 *	@param colls:		An array of the required collection names to verify
+	 *	@param callback:	A callback function used to handle the operation response
+	 *
+	 *	@return {void}
+	 */
+	d.validate = function(obj, colls, callback){
 		var testUrl = "mongodb://" + obj.server + ":" + obj.port + "/" + obj.db;
 		var response = {};
 		MongoClient.connect(testUrl, function(err, db){
@@ -136,7 +164,7 @@ module.exports = (function(logger){
 				logger.error(message);
 				response.status = "error";
 				response.data = message;
-				res.send(JSON.stringify(response));
+				callback(response);
 				throw err;
 			}
 			
@@ -146,7 +174,7 @@ module.exports = (function(logger){
 					logger.error(message);
 					response.status = "error";
 					response.data = message;
-					res.send(JSON.stringify(response));
+					callback(response);
 					throw err;
 				}
 				
@@ -165,12 +193,27 @@ module.exports = (function(logger){
 					response.status = "success";
 				}
 				
-				res.send(JSON.stringify(response));
+				callback(response);
 			});
 		});
 	}
 	
-	d.initialize = function(obj, colls, res){
+	/**
+	 *	initialize
+	 *	Initializes the database, creating any collections that are required and missing
+	 *
+	 *	@param	obj:		An object containing the following fields:
+	 *							* server:	The server hostname to connect to 
+	 *							* port:		The TCP port on the server that MongoDB is listening on
+	 *							* db:		The database to connect to
+	 *							* user:		The username to authenticate with (optional)
+	 *							* pass:		The password to authenticate with (optional)
+	 *	@param colls:		An array of the required collection names to create
+	 *	@param callback:	A callback function used to handle the operation response
+	 *
+	 *	@return {void}
+	 */
+	d.initialize = function(obj, colls, callback){
 		var response = {};
 		var testUrl = "mongodb://" + obj.server + ":" + obj.port + "/" + obj.db;
 		MongoClient.connect(testUrl, function(err, db){
@@ -179,7 +222,7 @@ module.exports = (function(logger){
 				logger.error(message);
 				response.status = "error";
 				response.data = message;
-				res.send(JSON.stringify(response));
+				callback(response);
 				throw err;
 			}
 			
@@ -214,7 +257,7 @@ module.exports = (function(logger){
 								response.status = "success";
 							}
 							
-							res.send(JSON.stringify(response));
+							callback(response);
 						}
 					})
 				);
@@ -222,6 +265,15 @@ module.exports = (function(logger){
 		});
 	}
 	
+	/**
+	 *	startup
+	 *	Starts up the database and verifies that all required collections are present
+	 *
+	 *	@param colls:		An array of the required collection names to verify
+	 *	@param callback:	A callback that can accept and handle any startup errors that occur
+	 *
+	 *	@return {void}
+	 */
 	d.startup = function(colls, callback){
 		MongoClient.connect(url, function(err, db){
 			if(err){
@@ -252,7 +304,7 @@ module.exports = (function(logger){
 	}
 	
 	/**
-	 *	db.get
+	 *	get
 	 *	Retrieves data from a specified collection, using a specified query.
 	 *	
 	 *	@param obj:		An object containing the following fields:
@@ -305,15 +357,28 @@ module.exports = (function(logger){
 		});
 	}
 	
+	/**
+	 *	post
+	 *	Used to create new documents in a given collection
+	 *	@param obj:		An object containing the following properties:
+	 *						* coll:	The collection to add to
+	 *						* required: The required fields to validate (optional)
+	 *						* data:	The data for the new document
+	 *						* callback:	The callback to use in handling the response
+	 *
+	 *	@return {void}
+	 */
 	d.post = function(obj){
 		var missing = [];
 		var response = {};
-		for(var i=0;i<obj.required.length;i++){
-			if(!obj.data.hasOwnProperty(obj.required[i])){
-				missing.push(obj.required[i]);
-			}
-			else if(obj.data[obj.required[i]] == ""){
-				missing.push(obj.required[i]);
+		if(obj.hasOwnProperty("required")){
+			for(var i=0;i<obj.required.length;i++){
+				if(!obj.data.hasOwnProperty(obj.required[i])){
+					missing.push(obj.required[i]);
+				}
+				else if(obj.data[obj.required[i]] == ""){
+					missing.push(obj.required[i]);
+				}
 			}
 		}
 		
@@ -357,6 +422,18 @@ module.exports = (function(logger){
 		}
 	}
 	
+	/**
+	 *	update
+	 *	Used to update an existing document(s) in a given collection
+	 *
+	 *	@param obj:		An object containing the following properties:
+	 *						* coll:	The collection to update
+	 *						* query: The query to match in updating the document(s)
+	 *						* data:	The updated data for the document(s)
+	 *						* callback:	The callback to use in handling the response
+	 *
+	 *	@return {void}
+	 */
 	d.update = function(obj){
 		var response = {};
 		MongoClient.connect(url, function(err, db){
@@ -389,6 +466,19 @@ module.exports = (function(logger){
 		});
 	}
 	
+	/**
+	 *	addToArray
+	 *	Used to update an array field in a given collection
+	 *
+	 *	@param obj:		An object containing the following properties:
+	 *						* coll:	The collection to update
+	 *						* field:	The array field to update
+	 *						* query:	The query to match updated document(s) to
+	 *						* data:		The value to add to the array
+	 *						* callback:	The function used to handle the operation response
+	 *
+	 *	@result {void}
+	 */
 	d.addToArray = function(obj){
 		var response = {};
 		MongoClient.connect(url, function(err, db){
@@ -442,6 +532,17 @@ module.exports = (function(logger){
 		});
 	}
 	
+	/**
+	 *	delete
+	 *	Used to delete a document (or multiple) from a given collection
+	 *
+	 *	@param obj:		An object containing the following properties:
+	 *						* coll:	The collection to delete from
+	 *						* query: The query to match deleted documents to
+	 *						* callback: A function to handle the operation response
+	 *
+	 *	@return {void}
+	 */
 	d.delete = function(obj){
 		var response = {};
 		MongoClient.connect(url, function(err, db){

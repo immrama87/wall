@@ -1,18 +1,21 @@
 var fs = require("fs");
 
 module.exports = (function(app, express){
-	var path = "/api/help/";
+	var path = "/api/help";
 	
-	app.all(path + "*", function(req, res, next){
+	app.all(path, verifyAccess);
+	app.all(path + "/*", verifyAccess);
+	
+	function verifyAccess(req, res, next){
 		if(req.status == "unverified"){
 			fs.readFile("./html/html/login.html", "utf8", function(err, data){
-				res.send(generateHTML({}, data));
+				res.end(generateHTML({}, data));
 			});
 		}
 		else {
 			next();
 		}
-	});
+	}
 	
 	app.get(path, function(req, res){
 		fs.readdir("./api/v1.0/", function(err, files){
@@ -39,7 +42,7 @@ module.exports = (function(app, express){
 				if(err)
 					throw err;
 				
-				res.send(generateHTML(content, data));
+				res.end(generateHTML(content, data));
 			});
 		})
 	});
@@ -49,7 +52,7 @@ module.exports = (function(app, express){
 		next();
 	});
 	
-	app.get(path + ":module", function(req, res){
+	app.get(path + "/:module", function(req, res){
 		fs.readFile("./html/html/route-snippet.html", "utf8", function(err, routeSnippet){
 			fs.readFile("./api/v1.0/" + req.module + ".js", "utf8", function(err, data){
 				var content = {};
@@ -123,7 +126,7 @@ module.exports = (function(app, express){
 				content.links = linkHTML;
 				
 				fs.readFile("./html/html/route.html", "utf8", function(err, route){
-					res.send(generateHTML(content, route));
+					res.end(generateHTML(content, route));
 				});
 			});
 		});

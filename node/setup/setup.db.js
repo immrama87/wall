@@ -34,13 +34,13 @@ module.exports = (function(app, logger){
 							console.log(err);
 							content.driverRows += "<tr class='error' props='' selectable='false'>"
 							content.driverRows += "<td>" + dbFiles[i] + "</td>";
-							content.driverRows += "<td>Could not read driver config file. Ensure " + dbFiles[i] + ".json exists to use this driver.</td>";
+							content.driverRows += "<td>Could not read driver configuration. Contact the driver developer to use this driver.</td>";
 							content.driverRows += "<td></td>";
 							content.driverRows += "</tr>";
 						}
 					}
 				}
-				res.send(generateHTML(content, htmlFile));
+				res.end(generateHTML(content, htmlFile));
 			});
 		});
 	});
@@ -74,14 +74,14 @@ module.exports = (function(app, logger){
 						"Location":	"/setup/db/"
 					});
 					res.end();
-					throw err;
 				}
 			}
-			
-			res.writeHead(302, {
-				"Location":	"/setup/users/check"
-			});
-			res.end();
+			else {
+				res.writeHead(302, {
+					"Location":	"/setup/users/check"
+				});
+				res.end();
+			}
 		});
 	}
 	
@@ -93,7 +93,7 @@ module.exports = (function(app, logger){
 					message = "The file db/db.config.json could not be found and was expected for initialization.";
 				}
 				logger.error(message);
-				res.send(JSON.stringify({
+				res.end(JSON.stringify({
 					status:	"error",
 					data:	message
 				}));
@@ -102,7 +102,9 @@ module.exports = (function(app, logger){
 			
 			var config = JSON.parse(file);
 			var db = require("../db/" + config.driver.substring(0, config.driver.lastIndexOf(".js")))(logger);
-			db.initialize(config, missing, res);
+			db.initialize(config, missing, function(response){
+				res.end(JSON.stringify(response));
+			});
 		});
 	}
 	
@@ -114,7 +116,7 @@ module.exports = (function(app, logger){
 					message = "The file db/db.config.json could not be found and was expected for validation.";
 				}
 				logger.error(message);
-				res.send(JSON.stringify({
+				res.end(JSON.stringify({
 					status:	"error",
 					data:	message
 				}));
@@ -123,7 +125,9 @@ module.exports = (function(app, logger){
 			
 			var config = JSON.parse(file);
 			var db = require("../db/" + config.driver.substring(0, config.driver.lastIndexOf(".js")))(logger);
-			db.validate(config, res, app.REQUIRED_TABLES);
+			db.validate(config, app.REQUIRED_TABLES, function(response){
+				res.end(JSON.stringify(response));
+			});
 		});
 	}
 	
@@ -151,14 +155,13 @@ module.exports = (function(app, logger){
 			if(err){
 				var message = "Error occurred writing to DB Config. Error Message: " + err
 				logger.error(message);
-				res.send(JSON.stringify({
+				res.end(JSON.stringify({
 					status:	"error",
 					data:	"message"
 				}));
 				throw message;
 			}
-			
-			res.send(JSON.stringify({
+			res.end(JSON.stringify({
 				status:	"success"
 			}));
 		});
