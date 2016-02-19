@@ -1,3 +1,22 @@
 section.details span#service-status.started{
 	color:#6FCC3D;
 }
+
+section.details span#service-status.stopped{
+	color:#FF6666;
+}
+
+section#log-list ul>li{
+	list-style-type:none;
+	color:#3E86B2;
+}
+
+section#log-details ol>li{
+	padding:0.5em;
+	padding-left:1em;
+	color:#666666;
+}
+
+section#log-details ol>li>span{
+	color:#3E86B2;
+}

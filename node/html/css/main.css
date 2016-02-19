@@ -14,19 +14,29 @@ header{
 	width:100%;
 }
 
-section.setup{
+section.setup, section.details{
 	background:white;
 	margin:0 auto;
+	margin-bottom:1em;
 	padding:1em;
 	text-align:left;
 	border-radius:0.5em;
 	box-shadow:0.5em 0.5em 0.5em rgba(0,0,0,0.1);
 }
 
-section.login, section.details{
+section.details h4{
+	text-align:left;
+}
+
+section.center{
+	text-align:center;
+}
+
+section.login{
 	width:50%;
 	background:white;
 	margin:0 auto;
+	margin-bottom:1em;
 	padding:1em;
 	border-radius:0.5em;
 	box-shadow:0.5em 0.5em 0.5em rgba(0,0,0,0.1);
@@ -127,7 +137,7 @@ div.param-field div.param-value input{
 	outline:none;
 }
 
-section.routes div.route button, section.login button{
+button{
 	cursor:not-allowed;
 	background:#FF6666;
 	color:white;
@@ -138,7 +148,7 @@ section.routes div.route button, section.login button{
 	outline:none;
 }
 
-section.routes div.route button.enabled, section.login button.enabled{
+button.enabled{
 	background:#6FCC3D;
 	cursor:pointer;
 }

@@ -111,13 +111,10 @@ function initializeRoutes(){
 					var help = require("./api/v1.0/help")(app, express);
 					
 					app.post("/app/restartService", function(req, res){
+						res.end(JSON.stringify({status: "success", data: "Call received to restart server"}));
 						if(app.service.status != "stopped"){
 							restartServer(res);
 						}
-					});
-
-					app.get("/app/status", function(req, res){
-						res.end(JSON.stringify({status: app.service.status}));
 					});
 				}
 			});
