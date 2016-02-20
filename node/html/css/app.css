@@ -7,6 +7,16 @@ table.selector tbody>tr{
 	cursor:pointer;
 }
 
+ul.selector{
+	padding:0 0 0 0.5em;
+}
+
+ul.selector>li{
+	list-style-type:none;
+	cursor:pointer;
+	padding:0.5em 0;
+}
+
 table.selector tbody>tr>td{
 	padding:0.5em 0;
 }

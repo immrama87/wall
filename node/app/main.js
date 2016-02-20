@@ -167,6 +167,10 @@ module.exports = (function(app, db, sessions, logger){
 				callback(data);
 			});
 		}
+		else if(objectId == "walls"){
+			data.Object = "Walls";
+			callback(data);
+		}
 	}
 	
 	function verifyAccess(req, res, next){

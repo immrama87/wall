@@ -73,4 +73,56 @@ module.exports = function(app, db, sessions){
 			}
 		});
 	});
+	
+	/**
+	 *	method:	GET
+	 *	path:	/api/walls/{wallId}/users
+	 *	description:	Retrieves the array of usernames that have access to a given wall
+	 *	data:	wallId
+	 *	response: UserAccessList
+	 */
+	app.get(path + ":wallId/users", function(req, res){
+		db.get({
+			coll:		"walls",
+			query:		{"_id":	req.wallId},
+			fields:		["UserAccessList"],
+			callback:	function(response){
+				res.send(JSON.stringify(response));
+			}
+		});
+	});
+	
+	/**
+	 *	method:	POST
+	 *	path:	/api/walls/{wallId}/users
+	 *	description:	Adds a username to the user access list for a given wall
+	 *	data:	wallId, UserName
+	 *	route:	unsubmittable
+	 */
+	app.post(path + ":wallId/users", function(req, res){
+		db.addToArray({
+			coll:		"walls",
+			field:		"UserAccessList",
+			query:		{"_id": req.wallId},
+			data:		req.body.UserName,
+			callback:	function(response){
+				res.send(JSON.stringify(response));
+			}
+		});
+	});
+	
+	app.param("userAccessId", function(req, res, next, userAccessId){
+		req.userAccessId = userAccessId;
+		next();
+	});
+	
+	/**
+	 *	method:	DELETE
+	 *	path:	/api/walls/{wallId}/users/{userAccessId}
+	 *	description: Removes a given username from the user access list for a given wall
+	 *	data:	wallId, userAccessId
+	 */
+	app.delete(path + ":wallId/users/:userAccessId" function(req, res){
+		
+	});
 }
