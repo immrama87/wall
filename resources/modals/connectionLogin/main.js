@@ -1,25 +1,42 @@
 var controller = (function(target){
+	var details;
 	target.init = function(){
 		target.login.focus();
+		details = target.details.getDetails();
 	}
 	
-	target.tryLogin = function(url, callbacks){
-		var user = target.login.value;
-		var pass = target.pass.value;
-		
-		var request = new XMLHttpRequest();
-		request.onreadystatechange = function(){
-			if(request.readyState == 4){
-				if(request.status == 200){
-					var response = JSON.parse(request.responseText);
-					callbacks.success(response.nsessionId);
+	$(target.loginBtn).on("click touch", function(evt){
+		WindowManager.post(details.url + "/api/users/login", {UserName: target.login.value, Password: target.pass.value}, {
+			success:	function(data){
+				var response = JSON.parse(data);
+				if(response.status == "success"){
+					if(!response.message){
+						target.close();
+					}
+					else if(response.message == "Password Update Required"){
+						WindowManager.loadModal("updatePassword", {
+							getDetails:	function(){
+								return {
+									user:	target.login.value,
+									server:	details.url
+								};
+							},
+							close:	function(){
+								target.close();
+							}
+						});
+					}
+				}
+				else {
+					alert(response.data);
 				}
 			}
+		});
+	});
+	
+	$([target.login, target.pass]).on("keyup", function(evt){
+		if(evt.which == 13){
+			$(target.loginBtn).click();
 		}
-		
-		request.open("POST", url);
-		request.withCredentials = true;
-		request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-		request.send("UserName=" + user + "&Password=" + pass);
-	}
+	});
 });

@@ -337,10 +337,20 @@ module.exports = (function(logger){
 					obj.query["_id"] = new mongo.ObjectID(obj.query["_id"]);
 				}
 				
+				if(obj.options){
+					if(fields == null){
+						fields = {};
+					}
+					for(var i in obj.options){
+						fields[i] = obj.options[i];
+					}
+				}
+				
 				coll.find(obj.query, fields).toArray(function(err, items){
 					if(err){
 						response.status = "error";
 						response.data = "An error occurred retrieving data from MongoDB.\nError Message: " + err;
+						logger.error("An error occurred retrieving data from MongoDB.\nError Message: " + err);
 					}
 					else {
 						response.status = "success";
@@ -349,6 +359,48 @@ module.exports = (function(logger){
 						response.metadata.fields = obj.fields;
 						
 						response.records = items;
+					}
+					
+					obj.callback(response);
+				});
+			}
+		});
+	}
+	
+	/**
+	 *	distinct
+	 *	Distinct returns an array of distinct values for a field in a collection.
+	 *  
+	 *	@param obj:		An object containing the following fields:
+	 *						* coll:		The collection to retrieve data from
+	 *						* query:	The find query to execute
+	 *						* field:	The field to retrieve distinct values for.
+	 *						* callback: A method to call once a response object has been built.
+	 */
+	d.distinct = function(obj){
+		var response = {};
+		MongoClient.connect(url, function(err, db){
+			if(err){
+				logger.error("Error connecting to MongoDB.\nError Message: " + err);
+				response.status = "error";
+				response.data = "An error occurred connecting to MongoDB.\nError Message: " + err;
+				obj.callback(response);
+			}
+			else {
+				var coll = db.collection(obj.coll);
+				
+				var values = coll.distinct(obj.field, obj.query, function(err, items){
+					if(err){
+						response.status = "error";
+						response.data = "An error occurred retrieving data from MongoDB.\nError Message: " + err;
+						logger.error("An error occurred retrieving data from MongoDB.\nError Message: " + err);
+					}
+					else {
+						response.status = "success";
+						response.metadata = {};
+						response.metadata.size = items.length;
+						response.metadata.field = obj.field;
+						response.items = items;
 					}
 					
 					obj.callback(response);
@@ -430,6 +482,7 @@ module.exports = (function(logger){
 	 *						* coll:	The collection to update
 	 *						* query: The query to match in updating the document(s)
 	 *						* data:	The updated data for the document(s)
+	 *						* markUpdate: Determines if the update should be tracked in the ModifiedDate column.
 	 *						* callback:	The callback to use in handling the response
 	 *
 	 *	@return {void}
@@ -448,7 +501,13 @@ module.exports = (function(logger){
 					obj.query["_id"] = new mongo.ObjectID(obj.query["_id"]);
 				}
 				
-				obj.data.ModifiedDate = new Date().getTime();
+				if(!obj.hasOwnProperty("markUpdate")){
+					obj.markUpdate = true;
+				}
+				
+				if(obj.markUpdate){
+					obj.data.ModifiedDate = new Date().getTime();
+				}
 				
 				coll.update(obj.query, {$set:obj.data}, function(err, result){
 					if(err){

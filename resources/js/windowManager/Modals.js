@@ -3,7 +3,6 @@ define("windowManager/Modals", [], function(){
 	
 	var modalBase = "./resources/modals/";
 	
-	
 	m.loadModal = function(url, func){
 		loadHTML(modalBase + url, func);
 	}
@@ -20,9 +19,10 @@ define("windowManager/Modals", [], function(){
 		modal.close = function(){
 			document.body.removeChild(background);
 		}
-
+		
 		return modal;
 	}
+	
 	
 	m.fadeIn = function(modal, time){
 		var msUpdate = 1 / time;
@@ -50,7 +50,7 @@ define("windowManager/Modals", [], function(){
 	function loadHTML(url, func){
 		loadResource(url + "/main.html", function(html){
 			var modal = parseModalHTML(html, func);
-			loadJS(url, modal, func);
+			return loadJS(url, modal, func);
 		});
 	}
 	
@@ -62,7 +62,7 @@ define("windowManager/Modals", [], function(){
 			controller(modal);
 			document.body.removeChild(script);
 			
-			loadCSS(url, modal, func);
+			return loadCSS(url, modal, func);
 		});
 	}
 	
@@ -106,6 +106,8 @@ define("windowManager/Modals", [], function(){
 			modal.style.opacity = 0;
 			
 			m.fadeIn(modal, 250);
+			
+			return modal;
 		});
 	}
 	
@@ -128,6 +130,20 @@ define("windowManager/Modals", [], function(){
 		
 		var modal = document.createElement("div");
 		modal.className = "modal";
+		
+		var topBar = document.createElement("div");
+		topBar.className = "modal-bar";
+		modal.appendChild(topBar);
+		
+		var close = document.createElement("button");
+		close.className = "close";
+		close.innerHTML = "X";
+		topBar.appendChild(close);
+		
+		$(close).on("click touch", function(evt){
+			modal.close();
+		});
+		
 		if(doc.body.hasChildNodes()){
 			addModalNodes(doc.body.childNodes, modal, func);
 			

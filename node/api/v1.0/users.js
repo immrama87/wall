@@ -51,6 +51,10 @@ module.exports = function(app, db, sessions, logger){
 					if(obj.hasOwnProperty("Password")){
 						obj.Password = encrypt(obj.Password, obj.CreateDate);
 					}
+					else {
+						obj.Password = encrypt(obj.UserName, obj.CreateDate);
+						obj.UpdatePassword = true;
+					}
 					obj.Permissions = ["General"];
 					db.post({
 						required:	["FirstName", "LastName", "UserName", "Password"],
@@ -77,7 +81,7 @@ module.exports = function(app, db, sessions, logger){
 		var response = {};
 		db.get({
 			coll:		"users",
-			fields:		["Password", "CreateDate", "LastLogin"],
+			fields:		["Password", "CreateDate", "LastLogin", "UpdatePassword"],
 			query:		{UserName:	obj.UserName},
 			callback:	function(data){
 				if(data.status == "error"){
@@ -96,12 +100,16 @@ module.exports = function(app, db, sessions, logger){
 					var pass = encrypt(obj.Password, record.CreateDate);
 					if(pass == record.Password){
 						response.status = "success";
+						if(record.UpdatePassword){
+							response.message = "Password Update Required";
+						}
 						res.set("Set-Cookie", "NSESSIONID=" + sessions.addSession(obj.UserName) + ";Path=/;HttpOnly");
 						var time = new Date().getTime();
 						db.update({
 							coll:	"users",
 							query:	{UserName:	obj.UserName},
 							data:	{LastLogin:	time},
+							markUpdate:	false,
 							callback:	function(response){}
 						});
 					}
@@ -114,6 +122,10 @@ module.exports = function(app, db, sessions, logger){
 				res.end(JSON.stringify(response));
 			}
 		});
+	});
+	
+	app.post(path + "logout/", function(req, res){
+		res.send(JSON.stringify(sessions.destroySession(req.userID)));
 	});
 	
 	app.param("id", function(req,res,next,id){
@@ -240,7 +252,10 @@ module.exports = function(app, db, sessions, logger){
 				else {
 					var password = encrypt(obj.OldPassword, data.records[0].CreateDate);
 					if(password == data.records[0].Password){
-						var update = {Password: encrypt(obj.NewPassword, data.records[0].CreateDate)};
+						var update = {
+							Password: encrypt(obj.NewPassword, data.records[0].CreateDate),
+							UpdatePassword:	false
+						};
 						db.update({
 							coll:		"users",
 							query:		{_id:	data.records[0]._id},

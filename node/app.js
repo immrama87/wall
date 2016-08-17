@@ -1,5 +1,7 @@
 var express = require("express");
 var app = express();
+var http = require("http").createServer(app);
+var io = require("socket.io").listen(http);
 
 var bodyParser = require("body-parser");
 app.use(bodyParser.json());
@@ -8,6 +10,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 var logFactory = require("./logger/logger")();
 var serviceLog = logFactory.getInstance("Server", "admin");
 var fs = require("fs");
+
 
 app.REQUIRED_TABLES = ["categories", "comments", "notes", "users", "walls"];
 
@@ -55,8 +58,10 @@ function initializeRoutes(){
 
 
 					app.all("*", function(req, res, next){
-						res.setHeader("Access-Control-Allow-Origin", req.headers.origin);
-						res.setHeader("Access-Control-Allow-Credentials", "true");
+						if(req.headers.origin){
+							res.setHeader("Access-Control-Allow-Origin", req.headers.origin);
+							res.setHeader("Access-Control-Allow-Credentials", "true");
+						}
 						if(req.url == "/api/users/login"){
 							next();
 						}
@@ -103,11 +108,15 @@ function initializeRoutes(){
 						}
 					});
 					
+					var notifier = require("./notifier/notifier")(io, db, sessions);
+					
 					var config = require("./app/main")(app, db, sessions, logFactory.getInstance("app", "admin"));
 					var users = require("./api/v1.0/users")(app, db, sessions, logFactory.getInstance("/api/users/", "admin"));
 					var walls = require("./api/v1.0/walls")(app, db, sessions);
-					var notes = require("./api/v1.0/notes")(app, db, sessions);
+					var notes = require("./api/v1.0/notes")(app, db, sessions, notifier);
 					var categories = require("./api/v1.0/categories")(app, db, sessions);
+					var actions = require("./api/v1.0/actions")(app, db, sessions);
+					var notifications = require("./api/v1.0/notifications")(app, db, sessions, notifier);
 					var help = require("./api/v1.0/help")(app, express);
 					
 					app.post("/app/restartService", function(req, res){
@@ -128,7 +137,7 @@ function startServer(){
 	app.service.status = "starting";
 	app.service.sockets = {};
 	app.service.nextId = 0;
-	server = app.listen(3000, function(){
+	server = http.listen(3000, function(){
 		initializeRoutes();
 		var host = server.address().address;
 		var port = server.address().port;

@@ -65,6 +65,7 @@ module.exports = function(db, logger){
 					coll:		"users",
 					query:		{UserName:	session.id},
 					data:		{LastLogout: now},
+					markUpdate:	false,
 					callback:	function(data){}
 				});
 				delete sessions[sessId];
@@ -72,6 +73,31 @@ module.exports = function(db, logger){
 		}
 		
 		return id;
+	}
+	
+	s.destroySession = function(id){
+		var response = {};
+		for(var i in sessions){
+			if(sessions[i].id == id){
+				db.update({
+					coll:	'users',
+					query:	{UserName: id},
+					data:	{LastLogout: new Date().getTime()},
+					markUpdate:	false,
+					callback:	function(data){}
+				});
+				delete sessions[i];
+				response.status = "success";
+				break;
+			}
+		}
+		
+		if(response.status != "success"){
+			response.status = "error";
+			response.data = "No session was found for the currently logged in user.";
+		}
+		
+		return response;
 	}
 	
 	s.addPermission = function(id, perm){

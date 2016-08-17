@@ -65,11 +65,26 @@ div.modal-background {
   background: rgba(0, 0, 0, 0.1); }
 
 div.modal {
-  background: #FF6666;
+  background: #FFFFFF;
+  border:0.125em solid #FF6666;
   color: #333333; }
+  
+div.modal div.modal-bar button.close{
+	background:none;
+	color:#0971B2;
+	opacity:1;
+}
+
+div.modal div.modal-bar button.close:hover{
+	opacity:0.5;
+}
+  
+div.modal input, div.modal textarea, div.modal select{
+	border:1px solid #CCCCCC;
+}
 
 div.modal button {
-  background: #6A8C64;
+  background: #0971B2;
   color: #FFFFFF; }
 
 /*# sourceMappingURL=colors.css.map */

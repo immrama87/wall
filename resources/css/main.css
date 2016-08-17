@@ -59,13 +59,12 @@ div#connections ul{
 
 div#connections ul li{
 	list-style-type:none;
-	margin-left:2em;
 	margin-top:0.5em;
 	margin-bottom:0.5em;
 	font-size:0.6em;
 	padding:0.25em;
 	padding-left:1em;
-	width:70%;
+	width:90%;
 	cursor:pointer;
 }
 
@@ -194,6 +193,7 @@ div#functions div.function-button{
 	margin-top:0.5em;
 	font-size:4em;
 	text-align:center;
+	position:relative;
 }
 
 div#functions div.function-button:hover{
@@ -206,6 +206,22 @@ div#functions div.settings{
 
 div#functions div.settings:hover{
 	background-image:url("../svg/settings-hover.svg");
+}
+
+div#functions i#notification-callout{
+	font-size:0.25em;
+	position:absolute;
+	bottom:-0.25em;
+	left:0;
+	font-weight:bold;
+}
+div#functions i#notification-callout span{
+	width:1em;
+	height:1em;
+	padding:0.25em 0.5em;
+	text-align:center;
+	background:#3E86B2;
+	border-radius:50%;
 }
 
 textarea.no-frame{
@@ -318,7 +334,13 @@ div.modal{
 	cursor:default;
 	display:block !important;
 	bottom:auto !important;
+	padding:1em;
 	box-shadow: 0.25em 0.25em 0.25em rgba(0,0,0,0.2);
+}
+
+div.modal div.modal-bar{
+	height:2em;
+	width:100%;
 }
 
 div.modal h1{
@@ -334,12 +356,42 @@ div.modal p{
 div.modal p input, div.modal p textarea, div.modal p select{
 	float:right;
 	width:75%;
-	border:none;
 	padding:0 0.5em;
 	outline:none;
-	box-shadow:inset 0.25em 0.25em 0.1em rgba(0,0,0,0.2);
 	display:inline-block;
 	font-weight:normal;
+}
+
+div.modal p input[type="checkbox"]{
+	outline:none;
+	box-shadow:none;
+	float:none;
+	width:auto;
+	position:absolute;
+	left:calc(25% + 2em);
+}
+
+div.modal p.color-picker input{
+	width:70%;
+	color:#FFFFFF;
+	text-shadow:1px 1px 0.125em rgba(0,0,0,1);
+}
+
+div.modal p.color-picker input[type="color"]{
+	width:4%;
+	margin-left:1%;
+	height:1.5em;
+	display:inline-block;
+	float:right;
+}
+
+div.modal p.color-picker div.picker div.selector{
+	width:1.5em;
+	height:1.5em;
+	margin:0 auto;
+	border:1px solid rgba(0,0,0,0.2);
+	border-radius:0.25em;
+	cursor:pointer;
 }
 
 div.modal p textarea{
@@ -369,4 +421,280 @@ div.modal a.button-link{
 	cursor:pointer;
 	display:block;
 	text-align:center;
+}
+
+div#chat{
+	position:absolute;
+	width:15%;
+	height:100%;
+	right:5em;
+	bottom:0;
+	border-left:0.25em solid #FF9999;
+	background:#F9F9F9;
+	padding:0.5em;
+	overflow-y:auto;
+	overflow-x:hidden;
+}
+
+div#chat section.lists{
+	height:calc(100% - 5em);
+	overflow-y:auto;
+}
+
+div#chat ul{
+	margin:0;
+	padding:0 0.5em;
+	font-weight:bold;
+	list-style-type:none;
+	color:#3E86B2;
+}
+
+div#chat ul li{
+	color:#000000;
+	padding:0.5em 1em;
+	cursor:pointer;
+}
+
+div#chat ul li:hover{
+	background:#3E86B2;
+	color:#FFFFFF;
+}
+
+div#chat ul li div.status{
+	display:inline-block;
+	float:right;
+	color:#999999;
+}
+
+div#chat ul li div.status.active{
+	color:#36B259;
+}
+
+div#chat ul li div.count{
+	display:inline-block;
+	float:right;
+	color:#FF6666;
+}
+
+div#chat div#add-room{
+	height:2.5em;
+	padding:0.5em;
+	text-align:center;
+	background:#999999;
+	color:#FFFFFF;
+	cursor:pointer;
+}
+
+div#chat div#add-room:hover{
+	background:#3E86B2;
+}
+
+div#notifications{
+	position:absolute;
+	width:33%;
+	right:5em;
+	bottom:1em;
+}
+
+div#chat-rooms{
+	position:absolute;
+	width:calc(100% - 5em);
+	height:2.5em;
+	left:0;
+	bottom:0;
+	overflow-y:visible;
+}
+
+div#chat-rooms div.chat-room{
+	float:right;
+	width:16%;
+	position:absolute;
+	bottom:0;
+}
+
+div#chat-rooms div.chat-room div.header{
+	padding:0.5em;
+	height:2.5em;
+	background:#999999;
+	color:#FFFFFF;
+	font-weight:bold;
+	cursor:pointer;
+	user-select: none;
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-o-user-select: none;
+	position:relative;
+}
+
+div#chat-rooms div.chat-room div.header div.user-pop{
+	position:absolute;
+	bottom:3em;
+	right:0.5em;
+	background:#FFFFFF;
+	color:#000000;
+	border:1px solid #CCCCCC;
+	border-radius:0.5em;
+	box-shadow:0.25em 0.25em 0.25em rgba(0,0,0,0.2);
+}
+
+div#chat-rooms div.chat-room div.header div.user-pop div.caret{
+	position: absolute;
+    bottom: -0.5em;
+    right: 2em;
+    border-width: 0.5em;
+    border-top-color: #CCCCCC;
+}
+
+div#chat-rooms div.chat-room div.header div.user-pop div.user-add{
+	padding:1em;
+}
+
+div#chat-rooms div.chat-room div.header div.user-pop div.user-add:hover{
+	color:#3E86B2;
+}
+
+div#chat-rooms div.chat-room div.header div.add-users{
+	margin-right:0.5em;
+}
+
+div#chat-rooms div.chat-room div.header.new{
+	background:#36B259;
+}
+
+div#chat-rooms div.chat-room div.content-frame{
+	height:25em;
+	background:#FFFFFF;
+	border-left:1px solid #CCCCCC;
+	border-right:1px solid #CCCCCC;
+	display:none;
+	padding:1em;
+	overflow-y:auto;
+}
+
+div#chat-rooms div.chat-room div.message-frame{
+	height:5em;
+	background:#EEEEEE;
+	border-left:1px solid #CCCCCC;
+	border-right:1px solid #CCCCCC;
+	display:none;
+}
+
+div#chat-rooms div.chat-room.open div.content-frame, div#chat-rooms div.chat-room.open div.message-frame{
+	display:block;
+}
+
+div#chat-rooms div.chat-room div.content-frame div.clear{
+	width:100%;
+	height:0.25em;
+	clear:both;
+}
+
+div#chat-rooms div.chat-room div.content-frame div.message{
+	display:inline-block;
+	clear:both;
+	padding:0.5em;
+	border-radius:0.5em;
+}
+
+div#chat-rooms div.chat-room div.content-frame div.incoming{
+	background:#3E86B2;
+	color:#FFFFFF;
+	border-top-left-radius:0;
+	position:relative;
+}
+
+div#chat-rooms div.chat-room div.content-frame div.outgoing{
+	background:#36B259;
+	color:#FFFFFF;
+	border-top-right-radius:0;
+	float:right;
+	position:relative;
+}
+
+div#chat-rooms div.chat-room div.content-frame div.user-mark{
+	display:block;
+	background:none;
+	font-size:0.8em;
+	color:#CCCCCC;
+	padding-left:0;
+}
+
+div#chat-rooms div.chat-room div.content-frame div.earlier-link{
+	text-align:center;
+	color:#3E86B2;
+	font-size:0.8em;
+	cursor:pointer;
+}
+
+div#chat-rooms div.chat-room div.content-frame div.earlier-link:hover{
+	text-decoration:underline;
+}
+
+div#chat-rooms div.chat-room div.content-frame div.user-mark:before{
+	display:none;
+}
+
+div#chat-rooms div.chat-room div.content-frame div.time,
+div#chat-rooms div.chat-room div.content-frame div.offline{
+	width:100%;
+	font-size:0.8em;
+	color:#CCCCCC;
+	text-align:center;
+}
+
+div#chat-rooms div.chat-room div.content-frame div.typing{
+	background:#CCCCCC;
+	font-weight:bold;
+}
+
+div#chat-rooms div.chat-room div.content-frame div.incoming:before{
+	content: ' ';
+    height: 0;
+    width: 0;
+    position: absolute;
+    left: -0.7em;
+    top: 0;
+    border: 0.75em solid transparent;
+    border-top-color: #3E86B2;
+}
+
+div#chat-rooms div.chat-room div.content-frame div.outgoing:after{
+	content: ' ';
+	height:0;
+	width:0;
+	position:absolute;
+	right:-0.7em;
+	top:0;
+	border:0.75em solid transparent;
+	border-top-color:#36B259;
+}
+
+div#chat-rooms div.chat-room div.message-frame textarea{
+	width:95%;
+	height:4.5em;
+	margin-left:2.5%;
+	margin-top:0.5em;
+	resize:none;
+	outline:none;
+	border-radius:0.5em;
+	padding:0.25em;
+}
+
+div#notifications div.note-pop{
+	width:85%;
+	margin:0 auto;
+	border:1px solid #CCCCCC;
+	border-radius:0.5em;
+	padding:1em;
+	cursor:pointer;
+	background:#FFFFFF;
+}
+
+div#notifications div.note-pop:hover{
+	text-decoration:underline;
+}
+
+div#notifications div.note-pop h1{
+	font-size:1.25em;
 }

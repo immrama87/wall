@@ -3,17 +3,46 @@ var controller = (function(target){
 	
 	target.init = function(){
 		user = target.userDetails.getUser();
-		
-		target.name.innerHTML = generateDetail("Name", user.FirstName + " " + user.LastName);
-		target.userName.innerHTML = generateDetail("Username", user.UserName);
-		
 		server = target.userDetails.getServer();
-		target.editButtons.style.display="none";
-		target.changePassword.style.display = "none";
-		getUserDetails();
+		
+		if(user != null){
+			target.name.innerHTML = generateDetail("Name", user.FirstName + " " + user.LastName);
+			target.userName.innerHTML = generateDetail("Username", user.UserName);
+		
+			target.editButtons.style.display="none";
+			target.changePassword.style.display = "none";
+			getUserDetails();
+		}
+		else {
+			target.name.innerHTML = generateDetail("Name", "<input id=\"user.name\"/>");
+			target.userName.innerHTML = generateDetail("Username", "<input id=\"user.userName\"/>");
+			$(target.defaultButtons).hide();
+			$(target.changePassword).hide();
+			
+			$(target.save).on("click touch", function(evt){
+				var obj = {};
+				var name = document.getElementById("user.name").value.trim().split(" ");
+				obj.FirstName = name[0];
+				name.splice(0, 1);
+				obj.LastName = name.join(" ");
+				obj.UserName = document.getElementById("user.userName").value.trim();
+				WindowManager.post(server + "/api/users", obj, {
+					success:	function(data){
+						var response = JSON.parse(data);
+						
+						if(response.status == "success"){
+							target.close();
+						}
+						else {
+							alert(response.data);
+						}
+					}
+				});
+			});
+		}
 	}
 	
-	target.edit.onclick = function(){
+	$(target.edit).on("click touch", function(evt){
 		target.name.innerHTML = generateDetail("Name", "<input id=\"user.name\" value=\"" + user.FirstName + " " + user.LastName + "\"/>");
 		target.userName.style.display="none";
 		target.createDate.style.display="none";
@@ -23,9 +52,29 @@ var controller = (function(target){
 		target.defaultButtons.style.display="none";
 		target.editButtons.style.display="";
 		target.changePassword.style.display = "";
-	}
+		
+		$(target.save).on("click touch", function(evt){
+			var obj = {};
+			var name = document.getElementById("user.name").value.trim().split(" ");
+			obj.FirstName = name[0];
+			name.splice(0, 1);
+			obj.LastName = name.join(" ");
+			WindowManager.put(server + "/api/users/" + user.UserName, obj, {
+				success:	function(data){
+					var response = JSON.parse(data);
+					
+					if(response.status == "success"){
+						target.close();
+					}
+					else {
+						alert(response.data);
+					}
+				}
+			});
+		});
+	});
 	
-	target.changePassword.onclick = function(){
+	$(target.changePassword).on("click touch", function(evt){
 		WindowManager.loadModal("updatePassword", {
 			getDetails: function(){
 				return {
@@ -34,7 +83,7 @@ var controller = (function(target){
 				};
 			}
 		});
-	}
+	});
 	
 	function getUserDetails(){
 		WindowManager.get(server + "/api/users/" + user.UserName, {

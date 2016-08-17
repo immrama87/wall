@@ -122,7 +122,7 @@ module.exports = function(app, db, sessions){
 	 *	description: Removes a given username from the user access list for a given wall
 	 *	data:	wallId, userAccessId
 	 */
-	app.delete(path + ":wallId/users/:userAccessId" function(req, res){
+	app.delete(path + ":wallId/users/:userAccessId", function(req, res){
 		
 	});
 }

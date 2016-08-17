@@ -15,6 +15,7 @@
 	
 	<script type="text/javascript" src="resources/js/jquery/jquery-1.12.0.min.js"></script>
 	<script type="text/javascript" src="resources/js/DataTables-1.10.10/media/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 </head>
 <body>
 	<div id="windows">
@@ -44,6 +45,34 @@
 		<div class="function-button" function="settings">
 			<i class="fa fa-cog"></i>
 		</div>
+		<div class="function-button" function="notifications">
+			<i class="fa fa-envelope"></i>
+			<i id="notification-callout"><span></span></i>
+		</div>
+		<div class="function-button" function="chat">
+			<i class="fa fa-comments"></i>
+		</div>
+		<div class="function-button" function="print">
+			<i class="fa fa-print"></i>
+		</div>
+		<div class="function-button" function="logout">
+			<i class="fa fa-sign-out"/></i>
+		</div>
+	</div>
+	<div id="chat" class="hide">
+		<section class="lists">
+			<ul id="chat-people">People
+			</ul>
+			<ul id="chat-room-list">Rooms
+			</ul>
+			<ul id="chat-recent">Recent
+			</ul>
+		</section>
+		<div id="add-room"><i class="fa fa-plus"></i> Add New Room</div>
+	</div>
+	<div id="chat-rooms">
+	</div>
+	<div id="notifications">
 	</div>
 	<script type="text/javascript" src="resources/js/require/require.js" data-main="resources/js/require/main.js"></script>
 </body>

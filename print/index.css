@@ -1,0 +1,15 @@
+body,html{
+	width:8.5in;
+	height:11in;
+	margin:0;
+	padding:0;
+}
+
+div.placeholder{
+	width:3in;
+	height:3in;
+	display:inline-block;
+	border:1px solid black;
+	margin-left:1in;
+	margin-top:0.5in;
+}

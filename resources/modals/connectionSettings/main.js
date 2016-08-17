@@ -38,8 +38,8 @@ var controller = (function(target){
 		}
 	}
 	
-	function getUsers(url){
-		WindowManager.get(url + "/api/users", {
+	function getUsers(){
+		WindowManager.get(details.url + "/api/users", {
 			success:	function(data){
 				var response = JSON.parse(data);
 				if(response.status == "success"){
@@ -83,12 +83,29 @@ var controller = (function(target){
 				},
 				getServer:		function(){
 					return details.url;
+				},
+				close:			function(){
+					getUsers();
 				}
 			});
 		}
 		
 		return tr;
 	}
+	
+	$(target.addUser).on("click touch", function(evt){
+		WindowManager.loadModal("userDetails", {
+			getUser:	function(){
+				return null;
+			},
+			getServer:	function(){
+				return details.url;
+			},
+			close:		function(){
+				getUsers();
+			}
+		});
+	});
 	
 	function selectSection(name){
 		var lis = target.nav.getElementsByTagName("li");

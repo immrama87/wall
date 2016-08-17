@@ -10,6 +10,7 @@ define('stickies/Sticky', [], function(){
 		var moving = false;
 		var comments = [];
 		var lastX, lastY, lastHeight, lastWidth;
+		var color = "#F9FFB5";
 		
 		var bounds = {
 			x1: 25,
@@ -31,6 +32,10 @@ define('stickies/Sticky', [], function(){
 		
 		s.getName = function(){
 			return name;
+		}
+		
+		s.setColor = function(c){
+			color = c;
 		}
 		
 		s.addComment = function(comment){
@@ -417,7 +422,7 @@ define('stickies/Sticky', [], function(){
 			var h = bounds.y2 - bounds.y1;
 			
 			context.beginPath();
-			context.fillStyle = "#F9FFB5";
+			context.fillStyle = color;
 			context.moveTo(x-height.topLeft,y-height.topLeft);
 			if(height.topLeft == height.topRight){
 				context.lineTo(x+w-height.topRight,y-height.topRight);

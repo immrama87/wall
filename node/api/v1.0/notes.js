@@ -1,4 +1,4 @@
-module.exports = function(app, db, sessions){
+module.exports = function(app, db, sessions, notifier){
 	var path = "/api/walls/:wallId/notes/";
 	
 	/**
@@ -12,7 +12,7 @@ module.exports = function(app, db, sessions){
 		db.get({
 			coll:		"notes",
 			query:		{WallID:	req.wallId},
-			fields:		["DisplayText"],
+			fields:		["DisplayText", "categoryId"],
 			callback:	function(response){
 				res.end(JSON.stringify(response));
 			}
@@ -81,14 +81,75 @@ module.exports = function(app, db, sessions){
 		obj.CreatedBy = req.userID;
 		obj.ModifiedBy = req.userID;
 		
-		db.post({
-			required:	["DisplayText", "WallID", "CreateDate", "ModifiedDate"],
-			coll:		"notes",
-			data:		obj,
-			callback:	function(response){
-				res.end(JSON.stringify(response));
+		db.get({
+			coll:		"actions",
+			query:		{wallId: req.wallId, ActionKey: "add-note"},
+			fields:		["Approval", "Notification", "ApprovalType", "NotificationText"],
+			callback:	function(actionGet){
+				if(actionGet.status == "success"){
+					if(actionGet.records.length > 0){
+						db.get({
+							coll:		"walls",
+							query:		{_id: req.wallId},
+							fields:		["UserAccessList", "Name"],
+							callback:	function(userList){
+								if(userList.status == "success"){
+									if(userList.records[0].UserAccessList){
+										if(actionGet.records[0].Approval == "true"){
+											
+										}
+										if(actionGet.records[0].Notification == "true"){
+											var notification = actionGet.records[0].NotificationText;
+											while(notification.indexOf("{{") > -1){
+												var start = notification.indexOf("{{");
+												var end = notification.indexOf("}}", start) + 2;
+												var rep = notification.substring(start+2, end-2);
+												var repStr;
+												if(rep == "Wall.Name"){
+													repStr = userList.records[0].Name;
+												}
+												else {
+													repStr = obj[rep] || "";
+												}
+												notification = notification.substring(0, start) + repStr + notification.substring(end);
+											}
+											
+											for(var i=0;i<userList.records[0].UserAccessList.length;i++){
+												notifier.createNotification(userList.records[0].UserAccessList[i], "message", notification);
+											}
+										}
+										completeRequest();
+									}
+									else {
+										completeRequest();
+									}
+								}
+								else {
+									res.end(JSON.stringify(userList));
+								}
+							}
+						});
+					}
+					else {
+						completeRequest();
+					}
+				}
+				else {
+					res.end(JSON.stringify(actionGet));
+				}
 			}
 		});
+		
+		function completeRequest(){
+			db.post({
+				required:	["DisplayText", "WallID", "CreateDate", "ModifiedDate"],
+				coll:		"notes",
+				data:		obj,
+				callback:	function(response){
+					res.end(JSON.stringify(response));
+				}
+			});
+		}
 	});
 	
 	app.param("noteId", function(req, res, next, noteId){

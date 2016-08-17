@@ -128,6 +128,13 @@ module.exports = function(app, db, sessions){
 						query:		{_id:	req.catId},
 						callback:	function(response){
 							res.send(JSON.stringify(response));
+							
+							db.update({
+								coll:		"notes",
+								query:		{categoryId: req.catId},
+								data:		{categoryId: null},
+								callback:	function(response){}
+							});
 						}
 					});
 				}

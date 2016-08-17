@@ -5,12 +5,20 @@ define('wallManager/WallManager', ['stickies'], function(StickyManager){
 	var context;
 	var currentWall, currentURL;
 	
-	wm.init = function(name, wallId, url){
+	wm.init = function(name, wallId, url, manager){
 		if(context == undefined){
 			canvas.width = window.innerWidth;
 			canvas.height = window.innerHeight;		
 		
 			context = canvas.getContext('2d');
+		}
+		
+		wm.logout = manager.logout;
+		wm.notifications = manager.notifications;
+		wm.chat = manager.chat;
+		
+		wm.print = function(){
+			window.open(window.location.href + "print?id=" + wallId, "_blank");
 		}
 		
 		WindowManager.addWindow(name, {
@@ -49,6 +57,9 @@ define('wallManager/WallManager', ['stickies'], function(StickyManager){
 					wallId: currentWall,
 					url:	currentURL
 				};
+			},
+			close:	function(){
+				StickyManager.init(context, canvas, currentWall, currentURL);
 			}
 		});
 	}

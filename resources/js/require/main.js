@@ -20,13 +20,19 @@ require.config({
 			name:		'windowManager',
 			location:	'./windowManager',
 			main:		"WindowManager"
+		},
+		{
+			name:		'notificationManager',
+			location:	'./notificationManager',
+			main:		'NotificationManager'
 		}
 	]
 });
 
-var WindowManager;
+var WindowManager, NotificationManager;
 
-require(['connectionManager', 'windowManager'], function(ConnectionManager, wm){
+require(['connectionManager', 'windowManager', 'notificationManager'], function(ConnectionManager, wm, nm){
 	WindowManager = wm;
+	NotificationManager = nm;
 	ConnectionManager.init();
 });

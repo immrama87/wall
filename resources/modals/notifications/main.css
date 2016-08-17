@@ -1,0 +1,13 @@
+div.modal{
+	width:50%;
+	left:25%;
+	top:25%;
+}
+
+div.modal table{
+	width:90% !important;
+}
+
+div.modal table tr{
+	background:none;
+}

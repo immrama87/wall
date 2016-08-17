@@ -10,7 +10,10 @@ define("connectionManager/WallsManager", ["wallManager"], function(WallManager){
 	function WallView(name, url, walls){
 		var wv = this;
 		
+		var openWindows = [];
+		
 		wv.init = function(){
+			NotificationManager.startSocket(url);
 			WindowManager.addWindow(name + " - Walls", {
 				view:		"walls",
 				manager:	wv
@@ -18,6 +21,7 @@ define("connectionManager/WallsManager", ["wallManager"], function(WallManager){
 		}
 		
 		wv.load = function(){
+			NotificationManager.checkNewNotifications(url);
 			renderWalls();
 		}
 		
@@ -34,6 +38,14 @@ define("connectionManager/WallsManager", ["wallManager"], function(WallManager){
 					}
 				}
 			});
+		}
+		
+		wv.addWindow = function(name){
+			openWindows.push(name);
+		}
+		
+		wv.getName = function(){
+			return name;
 		}
 			
 		wv.add = function(){
@@ -67,6 +79,33 @@ define("connectionManager/WallsManager", ["wallManager"], function(WallManager){
 			WindowManager.loadModal("connectionSettings", {
 				getDetails:	function(){
 					return {name: name, url: url};
+				}
+			});
+		}
+		
+		wv.notifications = function(){
+			NotificationManager.notifications(url);
+		}
+		
+		wv.chat = function(){
+			NotificationManager.chat(url);
+		}
+		
+		wv.logout = function(){
+			WindowManager.post(url + "/api/users/logout", {}, {
+				success:	function(data){
+					var response = JSON.parse(data);
+					if(response.status == "success"){
+						WindowManager.openWindow("Connections");
+						WindowManager.deleteWindow(name + " - Walls");
+						for(var i=0;i<openWindows.length;i++){
+							WindowManager.deleteWindow(openWindows[i]);
+						}
+						NotificationManager.closeConnection(url);
+					}
+					else {
+						alert(response.data);
+					}
 				}
 			});
 		}
@@ -109,7 +148,8 @@ define("connectionManager/WallsManager", ["wallManager"], function(WallManager){
 		div.appendChild(p);
 		
 		div.onclick = function(){
-			WallManager.init(wall.Name, wall._id, url);
+			WallManager.init(manager.getName() + " - " + wall.Name, wall._id, url, manager);
+			manager.addWindow(manager.getName() + " - " + wall.Name);
 		}
 		
 		var buttons = document.createElement("div");

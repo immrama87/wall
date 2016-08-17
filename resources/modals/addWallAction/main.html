@@ -1,0 +1,27 @@
+<h1 attr="details" func="getDetails">Action Settings</h1>
+<p>Action Type: 
+	<select attr="action">
+		<option value="add-note">Add Note</option>
+		<option value="add-category">Add Category</option>
+		<option value="modify-note">Modify Note</option>
+		<option value="modify-category">Modify Category</option>
+		<option value="delete-note">Delete Note</option>
+		<option value="delete-category">Delete Category</option>
+	</select>
+</p>
+<p>Require Approval: <input type="checkbox" attr="approval"/></p>
+<div attr="approvalDiv">
+	<p>Approval Type: <select attr="approvalType">
+		<option value="all">All Users Must Approve</option>
+		<option value="majority">A Majority Must Approve</option>
+		<option value="any">Any User Can Approve</option>
+	</select></p>
+</div>
+<p>Send Notification: <input type="checkbox" attr="notification"/></p>
+<div attr="notificationDiv">
+	<p class="textarea">Notification Text: <textarea attr="notificationText"></textarea></p>
+</div>
+
+<div class="button-div">
+	<button attr="save">Save Action</button>
+</div>

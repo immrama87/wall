@@ -2,6 +2,7 @@ define("windowManager/WindowManager", ["windowManager/Modals", "windowManager/Aj
 	var wm = {};
 	
 	wm.Tabulator = Tabulator;
+	wm.emSize = getEmSize();
 	
 	var connections = document.getElementById("connections");
 	var walls = document.getElementById("walls");
@@ -57,6 +58,16 @@ define("windowManager/WindowManager", ["windowManager/Modals", "windowManager/Aj
 	wm.addWindow = function(name, data){
 		windows[name] = data;
 		addWindowTab(name);
+	}
+	
+	wm.deleteWindow = function(name){
+		var lis = windowList.getElementsByTagName("li");
+		for(var i=0;i<lis.length;i++){
+			if(lis[i].nameValue == name){
+				deleteWindow(lis[i]);
+				break;
+			}
+		}
 	}
 	
 	wm.check = function(name, fallback){
@@ -136,7 +147,7 @@ define("windowManager/WindowManager", ["windowManager/Modals", "windowManager/Aj
 		
 		var h = d.getHours();
 		var a = "AM";
-		if(h > 12){
+		if(h >= 12){
 			h -= 12;
 			a = "PM";
 		}
@@ -176,7 +187,6 @@ define("windowManager/WindowManager", ["windowManager/Modals", "windowManager/Aj
 		
 		li.appendChild(div);
 		
-		
 		windowList.appendChild(li);
 		
 		wm.openWindow(name);
@@ -188,6 +198,23 @@ define("windowManager/WindowManager", ["windowManager/Modals", "windowManager/Aj
 			wm.openWindow(li.previousSibling.nameValue);
 		}
 		windowList.removeChild(li);
+	}
+	
+	function getEmSize(){
+		var text = document.createElement("p");
+		$(text).css({
+			"margin": "0",
+			"padding": "0",
+			"line-height": "1",
+			"font-size": "1em",
+			"height": "1em"
+		});
+		$(text).text("M");
+		document.body.appendChild(text);
+		var emSize = text.offsetHeight;
+		document.body.removeChild(text);
+		
+		return emSize;
 	}
 	
 	return wm;

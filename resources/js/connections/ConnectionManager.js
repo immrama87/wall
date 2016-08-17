@@ -9,6 +9,7 @@ define("connectionManager/ConnectionManager", ["connectionManager/WallsManager"]
 			view: 		"connections",
 			manager:	cm
 		});
+		
 		WindowManager.initFunctions(cm);
 		updateConnections();
 	}
@@ -109,19 +110,31 @@ define("connectionManager/ConnectionManager", ["connectionManager/WallsManager"]
 				var response = JSON.parse(data);
 				if(response.status == "unverified"){
 					WindowManager.loadModal("connectionLogin", {
+						getDetails:	function(){
+							return {
+								url:	url
+							};
+						},
 						login: function(target){
 							WindowManager.post(url + "/api/users/login", {UserName: target.login.value, Password: target.pass.value}, {
 								success:	function(data){
 									var response = JSON.parse(data);
 									if(response.status == "success"){
-										target.close();
-										tryConnection(url, name);
+										if(!response.message){
+											target.close();
+										}
+										else if(response.message == "Password Update Required"){
+											
+										}
 									}
 									else {
 										alert(response.data);
 									}
 								}
 							});
+						},
+						close:	function(){
+							tryConnection(url, name);
 						}
 					});
 				}

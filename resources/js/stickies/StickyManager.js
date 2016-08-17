@@ -8,6 +8,7 @@ define('stickies/StickyManager', ['stickies/Sticky'], function(Sticky){
 	var animFrame;
 	var url;
 	var wallId;
+	var categories;
 	
 	sm.init = function(ctx, cvs, w, u){
 		stickies = {};
@@ -17,27 +18,42 @@ define('stickies/StickyManager', ['stickies/Sticky'], function(Sticky){
 		url = u;
 		wallId = w;
 		zMap.push([]);
+		categories = {};
 		
 		context.clearRect(0, 0, canvas.width, canvas.height);
 		var modal = WindowManager.showLoading();
 		
 		canvas.onmousemove = checkBounds;
-		WindowManager.get(url + "/api/walls/" + wallId + "/notes", {
-			success:	function(data){
-				var response = JSON.parse(data);
-				if(response.status == "success"){
-					for(var i=0;i<response.records.length;i++){
-						if(!stickies.hasOwnProperty(response.records[i]["_id"])){
-							loadSticky(response.records[i]["_id"]);
-						}
-						stickies[response.records[i]["_id"]].setName(response.records[i].DisplayText);
+		WindowManager.get(url + "/api/walls/" + wallId + "/categories", {
+			success:	function(catData){
+				var catResponse = JSON.parse(catData);
+				if(catResponse.status == "success"){
+					for(var c=0;c<catResponse.records.length;c++){
+						categories[catResponse.records[c]["_id"]] = catResponse.records[c].Color;
 					}
-					
-					modal.close();
-					getPositions();
-				}
-				else {
-					alert(response.data);
+					console.log(categories);
+					WindowManager.get(url + "/api/walls/" + wallId + "/notes", {
+						success:	function(data){
+							var response = JSON.parse(data);
+							if(response.status == "success"){
+								for(var i=0;i<response.records.length;i++){
+									if(!stickies.hasOwnProperty(response.records[i]["_id"])){
+										loadSticky(response.records[i]["_id"]);
+									}
+									stickies[response.records[i]["_id"]].setName(response.records[i].DisplayText);
+									if(response.records[i].categoryId != undefined){
+										stickies[response.records[i]["_id"]].setColor(categories[response.records[i].categoryId]);
+									}
+								}
+								
+								modal.close();
+								getPositions();
+							}
+							else {
+								alert(response.data);
+							}
+						}
+					});					
 				}
 			}
 		});
@@ -59,7 +75,11 @@ define('stickies/StickyManager', ['stickies/Sticky'], function(Sticky){
 			returnDetails:	function(id, displayText){
 				stickies[id] = new Sticky(id);
 				stickies[id].setName(displayText);
-				checkZ(id, 25, 25);
+				WindowManager.post(url + "/api/walls/" + wallId + "/user/notes/" + id, {X: 25, Y: 25}, {
+					success:	function(response){
+						checkZ(id, 25, 25);
+					}
+				})
 			}
 		});
 		
