@@ -11,6 +11,7 @@ define('stickies/Sticky', [], function(){
 		var comments = [];
 		var lastX, lastY, lastHeight, lastWidth;
 		var color = "#F9FFB5";
+		var zoom = 1;
 		
 		var bounds = {
 			x1: 25,
@@ -36,6 +37,10 @@ define('stickies/Sticky', [], function(){
 		
 		s.setColor = function(c){
 			color = c;
+		}
+		
+		s.isMoving = function(){
+			return moving;
 		}
 		
 		s.addComment = function(comment){
@@ -165,8 +170,8 @@ define('stickies/Sticky', [], function(){
 		}
 		
 		s.updatePosition = function(evt, offsets){
-			var w = bounds.x2 - bounds.x1;
-			var h = bounds.y2 - bounds.y1;
+			var w = Sticky.constants.WIDTH;
+			var h = Sticky.constants.HEIGHT;
 			bounds.x1 = evt.pageX - offsets[0];
 			bounds.x2 = bounds.x1 + w;
 			bounds.y1 = evt.pageY - offsets[1];
@@ -202,6 +207,7 @@ define('stickies/Sticky', [], function(){
 		}
 		
 		s.drop = function(context){
+			moving = false;
 			var diff_tl = (lastHeight.topLeft - height.topLeft) / 3;
 			var diff_tr = (lastHeight.topRight - height.topRight) / 3;
 			var diff_bl = (lastHeight.bottomLeft - height.bottomLeft) / 3;
@@ -215,206 +221,33 @@ define('stickies/Sticky', [], function(){
 			};
 		}
 		
-		s.openForEditing = function(evt){
-			lastX = bounds.x1;
-			lastY = bounds.y1;
-			lastWidth = bounds.x2 - bounds.x1;
-			lastHeight = bounds.y2 - bounds.y1;
-			
-			var totalWidth = evt.target.width - 80;
-			var totalHeight = evt.target.height;
-					
-			var targetX = (totalWidth/2) - (totalWidth/4);
-			var targetY = (totalHeight/2) - (totalHeight/4);
-			var targetX2 = targetX + (totalWidth/2);
-			var targetY2 = targetY + (totalHeight/2);
-						
-			height = {
-				topLeft:	10,
-				topRight:	10,
-				bottomLeft:	10,
-				bottomRight:10
-			};
-			
-			return function(count){
-				var x1_diff = (targetX - bounds.x1)/count;
-				var y1_diff = (targetY - bounds.y1)/count;
-				var x2_diff = (targetX2 - bounds.x2)/count;
-				var y2_diff = (targetY2 - bounds.y2)/count;
-				
-				bounds.x1 += x1_diff;
-				bounds.y1 += y1_diff;
-				bounds.x2 += x2_diff;
-				bounds.y2 += y2_diff;
-			}
-		}
-		
-		s.displayEditor = function(){
-			var editorDiv = document.createElement("div");
-			editorDiv.className = "editor";
-			editorDiv.style.top = bounds.y1 + "px";
-			editorDiv.style.left = bounds.x1 + "px";
-			editorDiv.style.width = (bounds.x2 - bounds.x1 - 20) + "px";
-			editorDiv.style.height = (bounds.y2 - bounds.y1 - 20) + "px";
-			document.body.appendChild(editorDiv);
-			
-			var nameDiv = createNameSection();
-			editorDiv.appendChild(nameDiv);
-			if(name == ""){
-				nameDiv.input.focus();
-			}
-			
-			//Container for Comments items
-			var commentsDiv = document.createElement("div");
-			commentsDiv.className = "comments";
-			
-			//Header for Comments section
-			var commentsHead = document.createElement("h4");
-			commentsHead.appendChild(document.createTextNode("Comments:"));
-			commentsDiv.appendChild(commentsHead);
-			
-			//Container for Comments table
-			var commentsDisplay = document.createElement("div");
-			commentsDisplay.className = "display";
-			
-			//Table for rendering submitted comments
-			var commentsTable = document.createElement("table");
-			var commentsTHead = document.createElement("thead");
-			commentsTHead.appendChild(createHeaderRow(["Comment", "Submit Date", "Submitted By"]));
-			commentsTable.appendChild(commentsTHead);
-			commentsDisplay.appendChild(commentsTable);
-			
-			if(comments.length == 0){
-				var noComments = document.createElement("h4");
-				noComments.className = "noComments";
-				noComments.appendChild(document.createTextNode("No Comments"));
-				
-				commentsDisplay.appendChild(noComments);
-			}
-			else {
-				//TODO: Add Comments Table Code
-			}
-			
-			var commentsAdd = document.createElement("button");
-			commentsAdd.className = "left";
-			commentsAdd.appendChild(document.createTextNode("Add Comment"));
-			commentsDisplay.appendChild(commentsAdd);
-			
-			commentsDiv.appendChild(commentsDisplay);
-		
-			editorDiv.appendChild(commentsDiv);
-			
-			var btnDiv = document.createElement("div");
-			btnDiv.className = "btnDiv";
-			
-			var saveBtn = document.createElement("button");
-			saveBtn.className = "active";
-			saveBtn.appendChild(document.createTextNode("Apply Changes"));
-			btnDiv.appendChild(saveBtn);
-			
-			var cancelBtn = document.createElement("button");
-			cancelBtn.appendChild(document.createTextNode("Cancel"));
-			btnDiv.appendChild(cancelBtn);
-			
-			editorDiv.appendChild(btnDiv);
-		}
-		
-		function createNameSection(){
-			//Container for Name (Display Text) items
-			var nameDiv = document.createElement("div");
-			nameDiv.className = "name";
-			
-			//Header for Name (Display Text)
-			var nameHead = document.createElement("h4");
-			nameHead.appendChild(document.createTextNode("Display Text:"));
-			nameDiv.appendChild(nameHead);
-			
-			//Input textarea for Name (Display Text)
-			var nameInput = document.createElement("textarea");
-			nameInput.value = name;
-			nameInput.onkeyup = function(evt){
-				if(evt.keyCode == 13 && evt.shiftKey){
-					nameInput.value = nameInput.value.substring(0, nameInput.value.length - 1);
-					nameEdit.click();
-				}
-			}
-			nameDiv.appendChild(nameInput);
-			nameDiv.input = nameInput;
-			
-			//Button for saving/editing Display Text
-			var nameEdit = document.createElement("button");
-			nameDiv.appendChild(nameEdit);
-			
-			if(name == ""){
-				makeNameEditable();
-			}
-			else {
-				makeNameDisabled();
-			}
-			
-			function makeNameEditable(){
-				nameEdit.innerHTML = "";
-				nameEdit.appendChild(document.createTextNode("Save"));
-				nameEdit.onclick = function(){
-					if(nameInput.value != ""){
-						if(name != nameInput.value){
-							name = nameInput.value;
-						}
-						makeNameDisabled();
-					}
-					else {
-						alert("A Display Text value is required for all sticky notes.");
-						nameInput.focus();
-					}
-				}
-				
-				nameEdit.className = "active";
-				
-				nameInput.removeAttribute("disabled");
-				nameInput.focus();
-			}
-			
-			function makeNameDisabled(){
-				nameEdit.innerHTML = "";
-				nameEdit.appendChild(document.createTextNode("Edit"));
-				nameEdit.onclick = makeNameEditable;
-				nameEdit.className = "";
-				
-				nameInput.setAttribute("disabled", true);
-			}
-			
-			return nameDiv;
-		}
-		
-		function createHeaderRow(headers){
-			var tr = document.createElement("tr");
-			for(var i in headers){
-				tr.appendChild(createHeaderCell(headers[i]));
-			}
-			
-			return tr;
-		}
-		
-		function createHeaderCell(header){
-			var th = document.createElement("th");
-			th.appendChild(document.createTextNode(header));
-			
-			return th;
-		}
-		
 		/**DRAWING FUNCTIONS**/
 		s.draw = function(context, zoom){
-			var x = bounds.x1;
-			var y = bounds.y1;
+			bounds.x1 = bounds.x1 * zoom;
+			bounds.y1 = bounds.y1 * zoom;
+			bounds.x2 = bounds.x2 * zoom;
+			bounds.y2 = bounds.y2 * zoom;
 			
-			if(height.topLeft > 0 || height.topRight > 0 || height.bottomLeft > 0 || height.bottomRight > 0){
-				drawShadow(context, x, y);
+			var x = bounds.x1 - context.drawOffset[0];
+			var y = bounds.y1 - context.drawOffset[1];
+			var dims = [x + (bounds.x2 - bounds.x1), y + (bounds.y2 - bounds.y1)];
+			
+			if((x + dims[0] > 0 || x < context.canvas.width) &&
+				(y + dims[1] > 0 || y < context.canvas.height)){
+				if(height.topLeft > 0 || height.topRight > 0 || height.bottomLeft > 0 || height.bottomRight > 0){
+					drawShadow(context, x, y);
+				}
+				
+				drawSticky(context, x, y);
+				writeText(context, x, y);
+				lastX = x;
+				lastY = y;
 			}
 			
-			drawSticky(context, x, y);
-			writeText(context, x, y);
-			lastX = x;
-			lastY = y;
+			bounds.x1 = bounds.x1 / zoom;
+			bounds.y1 = bounds.y1 / zoom;
+			bounds.x2 = bounds.x2 / zoom;
+			bounds.y2 = bounds.y2 / zoom;
 		}
 		
 		function drawSticky(context, x, y){
@@ -496,6 +329,7 @@ define('stickies/Sticky', [], function(){
 			line_height = 25;
 			x+=5-height.topLeft;
 			context.fillStyle = "#000000";
+			context.strokeStyle = "#000000";
 			
 			maxHeight = 150-height.bottomLeft;
 			
@@ -569,6 +403,11 @@ define('stickies/Sticky', [], function(){
 		
 		return s;
 	});
+	
+	
+	Sticky.constants = {};
+	Sticky.constants.WIDTH = 150;
+	Sticky.constants.HEIGHT = 150;
 	
 	return Sticky;
 });

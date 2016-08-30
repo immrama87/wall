@@ -16,6 +16,9 @@ div.wall-icon:hover div.buttons {
 div.wall-icon div.buttons div {
   transition: color 0.2s ease; }
 
+canvas#wall{
+  transition: width 0.4s ease; }
+  
 div#functions {
   transition: right 0.4s ease; }
 

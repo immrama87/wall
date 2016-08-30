@@ -1,4 +1,4 @@
-define('stickies/StickyManager', ['stickies/Sticky'], function(Sticky){
+define('stickies/StickyManager', ['stickies/Sticky', 'wallManager/ViewPort'], function(Sticky, ViewPort){
 	var sm = {};
 	
 	var canvas, context;
@@ -9,6 +9,9 @@ define('stickies/StickyManager', ['stickies/Sticky'], function(Sticky){
 	var url;
 	var wallId;
 	var categories;
+	var zoom = 1;
+	var zoomLock = false;
+	var viewport;
 	
 	sm.init = function(ctx, cvs, w, u){
 		stickies = {};
@@ -19,11 +22,12 @@ define('stickies/StickyManager', ['stickies/Sticky'], function(Sticky){
 		wallId = w;
 		zMap.push([]);
 		categories = {};
+		viewport = new ViewPort(context, sm);
+		sm.draw = viewport.draw;
 		
 		context.clearRect(0, 0, canvas.width, canvas.height);
 		var modal = WindowManager.showLoading();
 		
-		canvas.onmousemove = checkBounds;
 		WindowManager.get(url + "/api/walls/" + wallId + "/categories", {
 			success:	function(catData){
 				var catResponse = JSON.parse(catData);
@@ -31,7 +35,6 @@ define('stickies/StickyManager', ['stickies/Sticky'], function(Sticky){
 					for(var c=0;c<catResponse.records.length;c++){
 						categories[catResponse.records[c]["_id"]] = catResponse.records[c].Color;
 					}
-					console.log(categories);
 					WindowManager.get(url + "/api/walls/" + wallId + "/notes", {
 						success:	function(data){
 							var response = JSON.parse(data);
@@ -41,7 +44,7 @@ define('stickies/StickyManager', ['stickies/Sticky'], function(Sticky){
 										loadSticky(response.records[i]["_id"]);
 									}
 									stickies[response.records[i]["_id"]].setName(response.records[i].DisplayText);
-									if(response.records[i].categoryId != undefined){
+									if(response.records[i].categoryId != undefined && categories[response.records[i].categoryId] != undefined){
 										stickies[response.records[i]["_id"]].setColor(categories[response.records[i].categoryId]);
 									}
 								}
@@ -61,7 +64,7 @@ define('stickies/StickyManager', ['stickies/Sticky'], function(Sticky){
 	
 	sm.setContext = function(ctx){
 		context = ctx;
-		draw();
+		viewport.draw();
 	}
 	
 	sm.addSticky = function(){
@@ -72,51 +75,90 @@ define('stickies/StickyManager', ['stickies/Sticky'], function(Sticky){
 					wallId:	wallId
 				}
 			},
-			returnDetails:	function(id, displayText){
+			returnDetails:	function(id, displayText, category){
 				stickies[id] = new Sticky(id);
 				stickies[id].setName(displayText);
+				if(categories[category] != undefined){
+					stickies[id].setColor(categories[category]);
+				}
 				WindowManager.post(url + "/api/walls/" + wallId + "/user/notes/" + id, {X: 25, Y: 25}, {
 					success:	function(response){
 						checkZ(id, 25, 25);
 					}
-				})
+				});
 			}
 		});
 		
-		draw();
+		viewport.draw();
 	}
 	
 	sm.getStickies = function(){
 		return stickies;
 	}
 	
+	sm.getZMap = function(){
+		return zMap;
+	}
+	
 	sm.getSticky = function(id){
 		return stickies[id];
 	}
 	
-	function checkBounds(evt){
-		console.log("Goodbye, World!");
+	sm.liftSticky = function(sticky){
+		spliceActive(sticky);
+		animFrame = sticky.pickUp();
+		animate(3);
+	}
+	
+	sm.dropSticky = function(sticky, evt){
+		animFrame = sticky.drop();
+		checkZ(sticky.id, evt.pageX - sticky.offsets[0], evt.pageY - sticky.offsets[1]);
+		animate(3, function(){
+			sticky.offsets = null;
+		});
+	}
+	
+	sm.updateZoom = function(update, evt){
+		zoom += update;
+		
+		var leftOffset = ((evt.pageX * (1 + update)) - evt.pageX);
+		var topOffset = ((evt.pageY * (1 + update)) - evt.pageY);
+		
+		context.drawOffset[0] += leftOffset;
+		if(context.drawOffset[0] <= 0){
+			context.drawOffset[0] = 0;
+		}
+		context.drawOffset[1] += topOffset;
+		if(context.drawOffset[1] <= 0){
+			context.drawOffset[1] = 0;
+		}
+		
+		for(var id in stickies){
+			stickies[id].setZoom(zoom);
+		}
+		viewport.draw();
+	}
+	
+	sm.checkBounds = function(evt){
 		var activeSticky;
 		context.clearRect(0, 0, canvas.width, canvas.height);
+		context.dims = [canvas.width, canvas.height];
 		for(var i=0;i<zMap.length;i++){
 			for(var j=0;j<zMap[i].length;j++){
-				if(stickies[zMap[i][j]].checkBounds(evt.pageX, evt.pageY)){
-					activeSticky = [i, j];
+				if(stickies[zMap[i][j]].checkBounds(evt.pageX, evt.pageY, context.drawOffset)){
+					activeSticky = zMap[i][j];
 				}
-				stickies[zMap[i][j]].draw(context);
 			}
 		}
 		
+		viewport.draw();
+		
+		var response = null;
 		if(activeSticky != undefined){
-			canvas.className = "hover";
-			activateSticky(stickies[zMap[activeSticky[0]][activeSticky[1]]]);
+			response = stickies[activeSticky];
 		}
-		else {
-			canvas.className = "";
-			canvas.onmousedown = null;
-			canvas.ondblclick = null;
-			canvas.onmouseup = null;
-		}
+		
+		return response;
 	}
 	
 	function activateSticky(sticky){
@@ -128,28 +170,6 @@ define('stickies/StickyManager', ['stickies/Sticky'], function(Sticky){
 			
 			//animFrame = sticky.openForEditing(evt);
 			//animate(15, sticky.displayEditor);
-		}
-		
-		canvas.onmousedown = function(evt){
-			spliceActive(sticky);
-			var offsets = sticky.grab(evt);
-			canvas.onmousemove = function(evt){
-				sticky.updatePosition(evt, offsets);
-				draw();
-			}
-			
-			canvas.onmouseup = function(mouseup){
-				animFrame = sticky.drop();
-				animate(3, function(){
-					checkZ(sticky.id, mouseup.pageX - offsets[0], mouseup.pageY - offsets[1]);
-					canvas.onmousedown = null;
-					canvas.onmousemove = checkBounds;
-					active = null;
-				});
-			}
-			
-			animFrame = sticky.pickUp();
-			animate(3);
 		}
 	}
 	
@@ -169,26 +189,12 @@ define('stickies/StickyManager', ['stickies/Sticky'], function(Sticky){
 		if(stepCount > 0){
 			window.requestAnimationFrame(function(){
 				animFrame(stepCount);
-				draw();
-				
+				viewport.draw();
 				animate(--stepCount, callback);
 			});
 		}
 		else if(callback != undefined){
 			callback();
-		}
-	}
-	
-	function draw(){
-		context.clearRect(0, 0, canvas.width, canvas.height);
-		for(var i=0;i<zMap.length;i++){
-			for(var j=0;j<zMap[i].length;j++){
-				stickies[zMap[i][j]].draw(context);
-			}
-		}
-		
-		if(active != undefined){
-			active.draw(context);
 		}
 	}
 	
@@ -220,13 +226,12 @@ define('stickies/StickyManager', ['stickies/Sticky'], function(Sticky){
 							pageX:	response.records[i].X,
 							pageY:	response.records[i].Y
 						};
-						
 						stickies[response.records[i].Parent].updatePosition(position, [0,0]);
 						
 						checkZ(response.records[i].Parent, response.records[i].X, response.records[i].Y, true);
 					}
 					
-					draw();
+					viewport.draw();
 				}
 				else {
 					alert(response.data);
@@ -251,6 +256,8 @@ define('stickies/StickyManager', ['stickies/Sticky'], function(Sticky){
 				}
 			}
 		}
+		
+		viewport.setDims(x, y);
 	
 		if(!found){
 			z=0;

@@ -13,7 +13,7 @@ var controller = (function(target){
 				var response = JSON.parse(data);
 				if(response.status == "success"){
 					if(response.data.insertedCount > 0){
-						target.details.returnDetails(response.data.insertedIds[0], target.displayText.value);
+						target.details.returnDetails(response.data.insertedIds[0], target.displayText.value, target.category.value);
 					}
 					target.close();
 				}

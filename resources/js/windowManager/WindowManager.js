@@ -129,15 +129,17 @@ define("windowManager/WindowManager", ["windowManager/Modals", "windowManager/Aj
 		
 		var menuSlide = document.getElementById("menu-slide");
 		
-		$(menuSlide).off("click touch touchstart");
-		$(menuSlide).on("click touch touchstart", function(evt){
+		$(menuSlide).off("click touch");
+		$(menuSlide).on("click touch", function(evt){
 			if(functions.getAttribute("is-hidden") === 'true'){
 				functions.style.right = "0";
 				functions.setAttribute("is-hidden", false);
+				$(wall).addClass("shrink-left");
 			}
 			else {
 				functions.style.right = "-5em";
 				functions.setAttribute("is-hidden", true);
+				$(wall).removeClass("shrink-left");
 			}
 		});
 	}

@@ -8,7 +8,7 @@ define('wallManager/WallManager', ['stickies'], function(StickyManager){
 	wm.init = function(name, wallId, url, manager){
 		if(context == undefined){
 			canvas.width = window.innerWidth;
-			canvas.height = window.innerHeight;		
+			canvas.height = window.innerHeight - document.getElementById("windows").offsetHeight;
 		
 			context = canvas.getContext('2d');
 		}
@@ -37,8 +37,8 @@ define('wallManager/WallManager', ['stickies'], function(StickyManager){
 		currentURL = loadData.url;
 		
 		var resizeInterval = window.setInterval(function(){
-			if(canvas.height != window.innerHeight || canvas.width != window.innerWidth){
-				canvas.height = window.innerHeight;
+			if(canvas.height != window.innerHeight  - document.getElementById("windows").offsetHeight|| canvas.width != window.innerWidth){
+				canvas.height = window.innerHeight - document.getElementById("windows").offsetHeight;
 				canvas.width = window.innerWidth;
 				context = canvas.getContext('2d');
 				StickyManager.setContext(context);

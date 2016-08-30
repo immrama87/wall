@@ -1,3 +1,11 @@
 02/11/2016 02:26:27 PM - [ERROR] Error connecting to MongoDB.
 Error Message: MongoError: connect ETIMEDOUT07/08/2016 08:13:47 PM - [ERROR] Error connecting to MongoDB.
-Error Message: MongoError: connect ECONNREFUSED ::1:27017
+Error Message: MongoError: connect ECONNREFUSED ::1:2701708/24/2016 04:28:58 PM - [ERROR] Error connecting to MongoDB.
+Error Message: MongoError: connect ENOBUFS 127.0.0.1:27017 - Local (undefined:undefined)08/24/2016 04:28:58 PM - [ERROR] Error connecting to MongoDB.
+Error Message: MongoError: connect ENOBUFS 127.0.0.1:27017 - Local (undefined:undefined)08/24/2016 04:28:58 PM - [ERROR] Error connecting to MongoDB.
+Error Message: MongoError: connect ENOBUFS 127.0.0.1:27017 - Local (undefined:undefined)08/24/2016 04:28:58 PM - [ERROR] Error connecting to MongoDB.
+Error Message: MongoError: connect ENOBUFS 127.0.0.1:27017 - Local (undefined:undefined)08/24/2016 04:28:58 PM - [ERROR] Error connecting to MongoDB.
+Error Message: MongoError: connect ENOBUFS 127.0.0.1:27017 - Local (undefined:undefined)08/24/2016 04:28:59 PM - [ERROR] Error connecting to MongoDB.
+Error Message: MongoError: connect ENOBUFS 127.0.0.1:27017 - Local (undefined:undefined)08/24/2016 04:29:07 PM - [ERROR] Error connecting to MongoDB.
+Error Message: MongoError: connect ENOBUFS 127.0.0.1:27017 - Local (undefined:undefined)08/24/2016 04:29:13 PM - [ERROR] Error connecting to MongoDB.
+Error Message: MongoError: connect ENOBUFS 127.0.0.1:27017 - Local (undefined:undefined)
